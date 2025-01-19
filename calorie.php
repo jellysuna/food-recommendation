@@ -1,17 +1,19 @@
 <?php
-include("loginserv.php");
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
+session_start();
 
-try {
-    $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Connection failed : " . $e->getMessage();
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+    header("Location: login.php");
+    exit();
 }
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['acc_id']);
+    header("Location: login.php");
+}
+
+require 'config.php';
 
 if (isset($_POST['meal_name']) && isset($_POST['calories_consumed'])) {
     $acc_id = $_SESSION['acc_id'];
@@ -367,7 +369,6 @@ $remainingCalories = max(0, $userCalorie - $totalCaloriesConsumed);
             <p id="caloriesRemaining">
                 <?php echo "$remainingCalories calories remaining"; ?>
             </p>
-
         </div>
         <div class="details">
             <h1>Today</h1>
@@ -378,7 +379,6 @@ $remainingCalories = max(0, $userCalorie - $totalCaloriesConsumed);
                     No calories consumed today.
                 </div>";
             }
-
             foreach ($rows as $submitcal) {
                 $entryCount = $submitcal['calorieintake_id'];
                 ?>

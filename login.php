@@ -54,23 +54,24 @@ include 'loginserv.php'
     
     </div>
 </div> 
-   </div>
-   <script src="jstry.js"></script> 
-   <script>
-function myFunction() {
-  var x = document.getElementById("acc_password");
-  var icon = document.getElementById("showHideIcon");
-  
-  if (x.type === "password") {
-    x.type = "text";
-    icon.classList.add("uil-eye");
-    icon.classList.remove("uil-eye-slash");
-  } else {
-    x.type = "password";
-    icon.classList.remove("uil-eye");
-    icon.classList.add("uil-eye-slash");
+</div>
+
+<script src="jstry.js"></script> 
+<script>
+  function myFunction() {
+    var x = document.getElementById("acc_password");
+    var icon = document.getElementById("showHideIcon");
+    
+    if (x.type === "password") {
+      x.type = "text";
+      icon.classList.add("uil-eye");
+      icon.classList.remove("uil-eye-slash");
+    } else {
+      x.type = "password";
+      icon.classList.remove("uil-eye");
+      icon.classList.add("uil-eye-slash");
+    }
   }
-}
 </script>
 
 </body>

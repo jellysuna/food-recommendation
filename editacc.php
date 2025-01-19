@@ -1,54 +1,85 @@
 <?php
-
 session_start();
-$acc_id = $_SESSION['acc_id'];
 
-// Fetch user data from the database
-$conn = mysqli_connect("localhost", "root", "", "foodrecs");
-$select_query = "SELECT * FROM account WHERE acc_id = $acc_id";
-$result = mysqli_query($conn, $select_query);
-$row = mysqli_fetch_assoc($result);
-
-// Assign fetched data to variables
-$acc_name = $row['acc_name'];
-$user_age = $row['user_age'];
-$user_gender = $row['user_gender'];
-$user_weight = $row['user_weight'];
-$user_height = $row['user_height'];
-$user_activity_level = $row['activity_level'];
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the updated values from the form
-    $new_acc_name = mysqli_real_escape_string($conn, $_POST["acc_name"]);
-
-    // Check if the new username is already taken
-    $check_query = "SELECT * FROM account WHERE acc_name = '$new_acc_name' AND acc_id != $acc_id";
-    $check_result = mysqli_query($conn, $check_query);
-    $num_rows = mysqli_num_rows($check_result);
-
-    if ($num_rows > 0) {
-        echo '<script>
-                    alert("Username is already taken.");
-                    window.location.href = "editacc.php"; // Redirect to the registration page
-                  </script>';
-    } else {
-        $new_user_age = empty($_POST["user_age"]) ? "NULL" : mysqli_real_escape_string($conn, $_POST["user_age"]);
-        $new_user_gender = empty($_POST["user_gender"]) ? "NULL" : "'" . mysqli_real_escape_string($conn, $_POST["user_gender"]) . "'";
-        $new_user_weight = empty($_POST["user_weight"]) ? "NULL" : mysqli_real_escape_string($conn, $_POST["user_weight"]);
-        $new_user_height = empty($_POST["user_height"]) ? "NULL" : mysqli_real_escape_string($conn, $_POST["user_height"]);
-        $new_user_activity_level = empty($_POST["activity_level"]) ? "NULL" : "'" . mysqli_real_escape_string($conn, $_POST["activity_level"]) . "'";
-        $update_query = "UPDATE account SET acc_name = '$new_acc_name', user_age = $new_user_age, user_gender = $new_user_gender, user_weight = $new_user_weight, user_height = $new_user_height, activity_level = $new_user_activity_level WHERE acc_id = $acc_id";
-
-        if (mysqli_query($conn, $update_query)) {
-            calculateUserCalorie($conn, $acc_id);
-            header("Location: check.php");
-            exit();
-        } else {
-            echo "Error updating record: " . mysqli_error($conn);
-        }
-    }
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+    header("Location: login.php");
+    exit();
 }
 
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['acc_id']);
+    header("Location: login.php");
+}
+
+require 'config.php';
+
+$acc_id = $_SESSION['acc_id'];
+
+try {
+    // Fetch user data from the database
+    $stmt = $conn->prepare("SELECT * FROM account WHERE acc_id = :acc_id");
+    $stmt->bindParam(':acc_id', $acc_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$row) {
+        echo "User not found.";
+        exit();
+    }
+
+    // Assign fetched data to variables
+    $acc_name = $row['acc_name'];
+    $user_age = $row['user_age'];
+    $user_gender = $row['user_gender'];
+    $user_weight = $row['user_weight'];
+    $user_height = $row['user_height'];
+    $user_activity_level = $row['activity_level'];
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Get the updated values from the form
+        $new_acc_name = $_POST["acc_name"];
+        $new_user_age = empty($_POST["user_age"]) ? null : $_POST["user_age"];
+        $new_user_gender = empty($_POST["user_gender"]) ? null : $_POST["user_gender"];
+        $new_user_weight = empty($_POST["user_weight"]) ? null : $_POST["user_weight"];
+        $new_user_height = empty($_POST["user_height"]) ? null : $_POST["user_height"];
+        $new_user_activity_level = empty($_POST["activity_level"]) ? null : $_POST["activity_level"];
+
+        // Check if the new username is already taken
+        $check_stmt = $conn->prepare("SELECT * FROM account WHERE acc_name = :acc_name AND acc_id != :acc_id");
+        $check_stmt->bindParam(':acc_name', $new_acc_name);
+        $check_stmt->bindParam(':acc_id', $acc_id);
+        $check_stmt->execute();
+
+        if ($check_stmt->rowCount() > 0) {
+            echo '<script>
+                    alert("Username is already taken.");
+                    window.location.href = "editacc.php";
+                  </script>';
+        } else {
+            // Update user data
+            $update_stmt = $conn->prepare("UPDATE account SET acc_name = :acc_name, user_age = :user_age, user_gender = :user_gender, user_weight = :user_weight, user_height = :user_height, activity_level = :activity_level WHERE acc_id = :acc_id");
+            $update_stmt->bindParam(':acc_name', $new_acc_name);
+            $update_stmt->bindParam(':user_age', $new_user_age, PDO::PARAM_INT);
+            $update_stmt->bindParam(':user_gender', $new_user_gender);
+            $update_stmt->bindParam(':user_weight', $new_user_weight, PDO::PARAM_INT);
+            $update_stmt->bindParam(':user_height', $new_user_height, PDO::PARAM_INT);
+            $update_stmt->bindParam(':activity_level', $new_user_activity_level);
+            $update_stmt->bindParam(':acc_id', $acc_id, PDO::PARAM_INT);
+
+            if ($update_stmt->execute()) {
+                calculateUserCalorie($conn, $acc_id);
+                header("Location: user-profile.php");
+                exit();
+            } else {
+                echo "Error updating record.";
+            }
+        }
+    }
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
 function calculateBMR($gender, $weight, $height, $age)
 {
     if ($gender === 'Male') {
@@ -60,53 +91,57 @@ function calculateBMR($gender, $weight, $height, $age)
     }
 }
 
-function calculateUserCalorie($conn, $acc_id)
-{
-    $query = mysqli_prepare($conn, "SELECT user_age, user_gender, user_weight, user_height, activity_level FROM `account` WHERE acc_id = ?");
-    mysqli_stmt_bind_param($query, 'i', $acc_id);
-    mysqli_stmt_execute($query);
-    $result = mysqli_stmt_get_result($query);
-    $user = mysqli_fetch_assoc($result);
+function calculateUserCalorie($conn, $acc_id) {
+    try {
+        // Fetch user details needed for calculation
+        $stmt = $conn->prepare("SELECT user_age, user_gender, user_weight, user_height, activity_level FROM account WHERE acc_id = :acc_id");
+        $stmt->bindParam(':acc_id', $acc_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user) {
-        if (
-            isset($user['user_age']) &&
-            isset($user['user_gender']) &&
-            isset($user['user_weight']) &&
-            isset($user['user_height']) &&
-            isset($user['activity_level'])
-        ) {
-            // Calculate BMR using the Harris-Benedict equation
-            $bmr = calculateBMR($user['user_gender'], $user['user_weight'], $user['user_height'], $user['user_age']);
+        if ($user) {
+            // Check if all required fields are present
+            if (
+                isset($user['user_age']) &&
+                isset($user['user_gender']) &&
+                isset($user['user_weight']) &&
+                isset($user['user_height']) &&
+                isset($user['activity_level'])
+            ) {
+                // Calculate BMR using the Harris-Benedict equation
+                $bmr = calculateBMR($user['user_gender'], $user['user_weight'], $user['user_height'], $user['user_age']);
 
-            // Map activity levels to multipliers
-            $activityMultipliers = [
-                'inactive' => 1.2,
-                'lightly_active' => 1.375,
-                'moderately_active' => 1.55,
-                'very_active' => 1.725,
-            ];
+                // Map activity levels to multipliers
+                $activityMultipliers = [
+                    'inactive' => 1.2,
+                    'lightly_active' => 1.375,
+                    'moderately_active' => 1.55,
+                    'very_active' => 1.725,
+                ];
 
-            // Use the activity multiplier directly
-            $activityMultiplier = $activityMultipliers[$user['activity_level']];
+                // Get the activity multiplier for the user's activity level
+                $activityMultiplier = $activityMultipliers[$user['activity_level']]; // Default to 1.2 if not found
 
-            // Calculate TDEE
-            $tdee = $bmr * $activityMultiplier;
+                // Calculate TDEE
+                $tdee = $bmr * $activityMultiplier;
 
-            // Store the TDEE in the database
-            $updateTDEEQuery = mysqli_prepare($conn, "UPDATE account SET user_calorie = ? WHERE acc_id = ?");
-            mysqli_stmt_bind_param($updateTDEEQuery, 'ii', $tdee, $acc_id);
-            mysqli_stmt_execute($updateTDEEQuery);
-        } else {
-            // If any required attribute is missing, set user_calorie to 0
-            $updateTDEEQuery = mysqli_prepare($conn, "UPDATE account SET user_calorie = 0 WHERE acc_id = ?");
-            mysqli_stmt_bind_param($updateTDEEQuery, 'i', $acc_id);
-            mysqli_stmt_execute($updateTDEEQuery);
+                // Update TDEE in the database
+                $updateStmt = $conn->prepare("UPDATE account SET user_calorie = :tdee WHERE acc_id = :acc_id");
+                $updateStmt->bindParam(':tdee', $tdee, PDO::PARAM_INT);
+                $updateStmt->bindParam(':acc_id', $acc_id, PDO::PARAM_INT);
+                $updateStmt->execute();
+            } else {
+                // If any required attribute is missing, set user_calorie to 0
+                $updateStmt = $conn->prepare("UPDATE account SET user_calorie = 0 WHERE acc_id = :acc_id");
+                $updateStmt->bindParam(':acc_id', $acc_id, PDO::PARAM_INT);
+                $updateStmt->execute();
+            }
         }
+    } catch (PDOException $e) {
+        // Handle any database-related errors
+        echo "Error calculating user calorie: " . $e->getMessage();
     }
 }
-
-
 ?>
 
 <!doctype html <html>
@@ -181,7 +216,7 @@ function calculateUserCalorie($conn, $acc_id)
                         <input type="submit" name="submit" value="Save">
                     </div>
                     <div class="input-field button">
-                        <input type="button" class="logout-button" value="Cancel" onclick="location.href='check.php'">
+                        <input type="button" class="logout-button" value="Cancel" onclick="location.href='user-profile.php'">
                     </div>
 
                 </form>

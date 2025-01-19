@@ -1,3 +1,21 @@
+<?php
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['acc_id']);
+    header("Location: login.php");
+}
+
+require 'config.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -199,10 +217,10 @@
     }
 
     .btn {
-      background: #000;
       border-radius: 6px;
+      border: 1px solid #fff;
       padding: 9px 18px;
-      text-decoration: none;
+      text: #fff;
       transition: 0.3s;
       font-size: 18px;
       display: flex;
@@ -213,6 +231,7 @@
       background: transparent;
       border: 1px solid #fff;
       color: #fff;
+      cursor: pointer;
     }
 
     .buttons .btn2:hover {
@@ -245,6 +264,7 @@
 
     .buttons i.icon {
       left: 0;
+      margin-top: 253px;
       color: #fff;
     }
 
@@ -273,8 +293,6 @@
       max-width: 650px;
       padding-left: 20px;
     }
-
-
 
     a {
       color: #fff;
@@ -535,13 +553,9 @@
         <li><a href="#">Contact</a></li>
       </ul>
       <div class="buttons">
-        <a href="chooseuser.php" class="btn">Log out</a>
-        <?php
-        if (isset($_POST['Log out'])) {
-          session_destroy();
-          unset($_SESSION['acc_id']);
-        }
-        ?>
+        <form method="post">
+          <input type="submit" name="logout" value="Log Out" class="btn"></input>
+        </form>
       </div>
     </nav>
 
@@ -568,7 +582,7 @@
 
       <div class="buttons">
         <i class="uil uil-user icon"></i>
-        <a href="check.php" class="btn2">Profile</a>
+        <a href="user-profile.php" class="btn2">Profile</a>
       </div>
 
       <div class="space"></div>

@@ -38,7 +38,7 @@ include 'deleteserv.php'
             <input type="submit" name="submit" value="Delete my account">
         </div>
         <div class="input-field button">
-        <input type="button" class="logout-button" value="Cancel" onclick="location.href='check.php'">
+        <input type="button" class="logout-button" value="Cancel" onclick="location.href='user-profile.php'">
         </div>
         <span><?php echo $success; ?></span>
     
