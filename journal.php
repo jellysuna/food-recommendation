@@ -1,17 +1,19 @@
 <?php
 include("loginserv.php");
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
 
-try {
-    $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Connection failed : " . $e->getMessage();
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+    header("Location: login.php");
+    exit();
 }
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['acc_id']);
+    header("Location: login.php");
+}
+
+require 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['journal_desc']) && isset($_POST['journal_text'])) {
@@ -156,7 +158,6 @@ $journal->execute([$acc_id]);
             saveButton.style.display = 'none';
             cancelButton.style.display = 'none';
         }
-
     </script>
 </head>
 
@@ -180,7 +181,6 @@ $journal->execute([$acc_id]);
 
             <div class="containertitle">
                 <div class="forms">
-
                     <form action="" method="post">
                         <div class="input-field">
                             <input type="text" required placeholder="Title" id="journal_desc"
@@ -191,13 +191,11 @@ $journal->execute([$acc_id]);
             <div class="space"></div>
             <div class="containertxt">
                 <div class="forms">
-
                     <form action="" method="post">
                         <div class="input-field">
                             <textarea required placeholder="Say something..." id="journal_text"
                                 name="journal_text"></textarea>
                         </div>
-
                 </div>
             </div>
             <div class="input-field-image">
@@ -222,8 +220,8 @@ $journal->execute([$acc_id]);
             <?php
             if ($journal->rowCount() <= 0) {
                 echo "<br><div class='no-items'>
-            \t\tNo journal entries.
-        </div>";
+                    \t\tNo journal entries.
+                </div>";
             }
             $entryCount = 0; // Initialize a loop counter
             ?>
@@ -268,7 +266,6 @@ $journal->execute([$acc_id]);
             <?php } ?>
         </div>
     </div>
-
 </body>
 
 </html>

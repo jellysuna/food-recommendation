@@ -1,18 +1,19 @@
 <?php
 include("loginserv.php");
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
 
-try {
-  $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-  echo "Connection failed: " . $e->getMessage();
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+  header("Location: login.php");
+  exit();
 }
 
+if (isset($_POST['logout'])) {
+  session_destroy();
+  unset($_SESSION['acc_id']);
+  header("Location: login.php");
+}
+
+require 'config.php';
 
 if (isset($_POST['save-note'])) {
   $history_id = $_POST['history_id'];
@@ -43,7 +44,6 @@ if (isset($_POST['delete-history'])) {
   }
 }
 
-
 $history = $conn->prepare("SELECT * FROM history WHERE acc_id = ? ORDER BY history_id");
 //$stmt = $conn->prepare("SELECT * FROM history WHERE acc_id = :acc_id");
 //$stmt->bindParam(':acc_id', $acc_id);
@@ -71,7 +71,6 @@ $history->execute([$acc_id]);
       box-sizing: border-box;
       font-family: 'Poppin', sans-serif;
     }
-
 
     body {
       background-color: #b7adde;
@@ -111,7 +110,6 @@ $history->execute([$acc_id]);
     }
 
     nav {
-
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -220,7 +218,6 @@ $history->execute([$acc_id]);
       outline: none;
       font-size: 16px;
       border-radius: 10px;
-
       border-top: 2px solid transparent;
       transition: all 0.2s ease;
       align-self: flex-start;
@@ -235,7 +232,6 @@ $history->execute([$acc_id]);
       font-size: 30px;
       transition: all 0.2s ease;
     }
-
 
     .input-field input:is(:focus, :valid)~i {
       color: #4070f4;
@@ -261,7 +257,6 @@ $history->execute([$acc_id]);
     .space {
       margin-top: 10px;
     }
-
 
     .content h2 {
       font-size: 35px;
@@ -494,8 +489,6 @@ $history->execute([$acc_id]);
   </div>
   <div class="space"></div>
 
-
-
   <div class="container2">
     <div class="forms">
       <?php
@@ -541,7 +534,6 @@ $history->execute([$acc_id]);
                     class="edit-history-note" style="display:none;" rows="3"
                     cols="70"><?php echo $historyEntry['history_note']; ?></textarea>
                 </p>
-
               </div>
 
               <div class="button-container">
@@ -555,7 +547,6 @@ $history->execute([$acc_id]);
                   <button class="save-button" type="submit" name="save-note" id="save-button-<?php echo $entryCount; ?>"
                     style="display:none;">Save</button>
                 </form>
-
               </div>
             </div>
           </form>
@@ -602,10 +593,7 @@ $history->execute([$acc_id]);
       editButton.style.display = 'inline-block';
       deleteButton.style.display = 'inline-block';
     }
-
   </script>
 
-
 </body>
-
 </html>

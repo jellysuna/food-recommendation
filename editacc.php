@@ -144,8 +144,8 @@ function calculateUserCalorie($conn, $acc_id) {
 }
 ?>
 
-<!doctype html <html>
-
+<!doctype html> 
+<html>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -159,7 +159,6 @@ function calculateUserCalorie($conn, $acc_id) {
 </head>
 
 <body>
-
     <div class="container">
         <div class="forms">
             <div class="form login">
@@ -187,6 +186,7 @@ function calculateUserCalorie($conn, $acc_id) {
                         <input type="text" placeholder="Weight (in kg)" id="user_weight" name="user_weight"
                             value="<?php echo isset($row['user_weight']) ? $row['user_weight'] : ''; ?>"><br /><br />
                     </div>
+                    
                     <div class="input-field">
                         <p>Height <style></style>
                         </p>
@@ -218,7 +218,6 @@ function calculateUserCalorie($conn, $acc_id) {
                     <div class="input-field button">
                         <input type="button" class="logout-button" value="Cancel" onclick="location.href='user-profile.php'">
                     </div>
-
                 </form>
             </div>
         </div>
@@ -226,5 +225,4 @@ function calculateUserCalorie($conn, $acc_id) {
     <script src="jstry.js"></script>
 
 </body>
-
 </html>

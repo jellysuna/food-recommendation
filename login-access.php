@@ -52,7 +52,6 @@ require 'config.php';
       overflow-x: auto;
       display: flex;
       flex-direction: column;
-
       width: 100%;
       min-height: 100vh;
       background-position: center;
@@ -112,7 +111,6 @@ require 'config.php';
       max-width: 100%;
       margin-right: 120px;
     }
-
 
     .space {
       margin-top: 50px;
@@ -522,7 +520,6 @@ require 'config.php';
       }
     }
 
-
     .link i.icon {
       right: 0;
       position: absolute;
@@ -535,11 +532,9 @@ require 'config.php';
 
   <title>Food Recommendation System</title>
 
-
 </head>
 
 <body>
-
   <div class="container">
     <nav>
       <div class="logo">
@@ -576,7 +571,6 @@ require 'config.php';
       </div>
     </div>
 
-
     <div class="content2" id="home">
       <div class="space"></div>
 
@@ -596,17 +590,14 @@ require 'config.php';
       <div class="containerss2">
         <div class="container3">
           <div class="link">
-
             <a href="journal.php" class="hire3">Journal </a>
-
             <a href="journal.php" class="journal">
               <img src="img/journal.png" alt="journal"></a>
             <p>Record your meal journey with us and keep track of your<br>eating behavior. This is a personal journal
               and won't be posted.</p>
-
           </div>
-
         </div>
+
         <div class="content3">
           <div class="container4">
             <div class="link">
@@ -614,7 +605,6 @@ require 'config.php';
               <a href="grocery.php" class="grocery">
                 <img src="img/grocery.png" alt="grocery"></a>
             </div>
-
           </div>
           <div class="space3"></div>
 
@@ -626,9 +616,6 @@ require 'config.php';
             </div>
           </div>
           <div class="space3"></div>
-
-
-
         </div>
       </div>
 
@@ -664,10 +651,7 @@ require 'config.php';
           </div>
         </div>
       </div>
-
-
     </div>
-
   </div>
 
   <script src="jstry.js"></script>

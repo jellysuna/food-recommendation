@@ -1,18 +1,7 @@
 <?php
 include("loginserv.php");
 
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
-
-try {
-    $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'error' => 'Database connection error']);
-    exit();
-}
+require 'config.php';
 
 if (isset($_POST['save-cal'])) {
     $calorieintake_id = $_POST['calorieintake_id'];
@@ -45,6 +34,4 @@ if (isset($_POST['save-cal'])) {
     echo json_encode(['success' => false, 'error' => 'Invalid request']);
     exit();
 }
-
-
 ?>

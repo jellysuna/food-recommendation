@@ -1,12 +1,11 @@
 <?php
+require 'config.php';
+
 $invalid = ""; 
 if (isset($_POST["submit"])) {
     if (empty($_POST["acc_name"]) || empty($_POST["acc_email"]) || empty($_POST["acc_password"])) {
         $invalid = "Must fill all areas";
     } else {
-        $conn = mysqli_connect("localhost", "root", "");
-        $db = mysqli_select_db($conn, "foodrecs"); 
-
         $username = $_POST['acc_name'];
         $email = $_POST['acc_email'];
         $password = password_hash($_POST['acc_password'], PASSWORD_BCRYPT); // Hash the password

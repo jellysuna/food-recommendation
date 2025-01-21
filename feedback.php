@@ -1,18 +1,19 @@
 <?php
 include("loginserv.php");
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
 
-try {
-    $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    //echo "connected";
-} catch (PDOException $e) {
-    echo "Connection failed : " . $e->getMessage();
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+    header("Location: login.php");
+    exit();
 }
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['acc_id']);
+    header("Location: login.php");
+}
+
+require 'config.php';
 
 if (isset($_POST['feedback_name']) && isset($_POST['feedback_desc'])) {
     $acc_id = $_SESSION['acc_id'];
@@ -83,7 +84,6 @@ $feedback->execute([$acc_id]);
             cancelButton.style.display = 'inline-block';
         }
 
-
         function cancelEdit(entryCount) {
             const feedbackEntry = document.querySelector(`.feedback-entry-${entryCount}`);
             const editFeedbackDesc = feedbackEntry.querySelector(`.edit-feedback-desc`);
@@ -95,9 +95,8 @@ $feedback->execute([$acc_id]);
             saveButton.style.display = 'none';
             cancelButton.style.display = 'none';
         }
-
-
     </script>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -107,7 +106,6 @@ $feedback->execute([$acc_id]);
 
     <!-- ===== CSS ===== -->
     <link rel="stylesheet" href="feedback.css">
-
 
     <title>Food Recommendation System</title>
 
@@ -130,10 +128,8 @@ $feedback->execute([$acc_id]);
 
     <div class=containerss>
         <form action="" method="post" enctype="multipart/form-data">
-
             <div class="containertitle">
                 <div class="forms">
-
                     <form action="" method="post">
                         <div class="input-field">
                             <input type="text" required placeholder="Title" id="feedback_name"
@@ -144,13 +140,11 @@ $feedback->execute([$acc_id]);
             <div class="space"></div>
             <div class="containertxt">
                 <div class="forms">
-
                     <form action="" method="post">
                         <div class="input-field">
                             <textarea required placeholder="Say something..." id="feedback_desc"
                                 name="feedback_desc"></textarea>
                         </div>
-
                 </div>
             </div>
             <div class="space"></div>
@@ -168,12 +162,12 @@ $feedback->execute([$acc_id]);
     <div class="container2">
         <div class="forms">
             <?php
-            if ($feedback->rowCount() <= 0) {
-                echo "<br><div class='no-items'>
-            \t\tNo feedback submitted.
-        </div><style> padding-left: 50px;</style>";
-            }
-            $entryCount = 0; // Initialize a loop counter
+                if ($feedback->rowCount() <= 0) {
+                    echo "<br><div class='no-items'>
+                    \t\tNo feedback submitted.
+                    </div><style> padding-left: 50px;</style>";
+                }
+                $entryCount = 0; // Initialize a loop counter
             ?>
             <?php while ($submitfeedback = $feedback->fetch(PDO::FETCH_ASSOC)) { ?>
                 <div class="submit-fb feedback-entry-<?php echo $entryCount; ?>">
@@ -192,7 +186,8 @@ $feedback->execute([$acc_id]);
                                 </p><br>
                                 <textarea id="edit-feedback-desc-<?php echo $entryCount; ?>" name="edit-feedback-desc"
                                     class="edit-feedback-desc" rows="4"
-                                    cols="50"><?php echo $submitfeedback['feedback_desc']; ?></textarea>
+                                    cols="50"><?php echo $submitfeedback['feedback_desc']; ?>
+                                </textarea>
                             </div>
                             <small>
                                 <?php echo $submitfeedback['feedback_date'] ?>
@@ -216,8 +211,6 @@ $feedback->execute([$acc_id]);
             <?php } ?>
         </div>
     </div>
-
-
 </body>
 
 </html>

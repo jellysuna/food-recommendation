@@ -65,7 +65,6 @@ $grocerylist->execute([$acc_id]);
     <!-- ===== CSS ===== -->
     <link rel="stylesheet" href="grocery1.css">
 
-
     <title>Groceries</title>
 </head>
 
@@ -102,8 +101,8 @@ $grocerylist->execute([$acc_id]);
             <?php
             if ($grocerylist->rowCount() <= 0) {
                 echo "<div class='no-items'>
-            No grocery added.
-        </div>";
+                    No grocery added.
+                </div>";
             }
             ?>
             <?php while ($addgrocery = $grocerylist->fetch(PDO::FETCH_ASSOC)) { ?>

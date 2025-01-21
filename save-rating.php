@@ -1,17 +1,6 @@
 <?php
 include("loginserv.php");
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
-
-try {
-    $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected successfully<br>";
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
+require 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['selectedRating'])) {

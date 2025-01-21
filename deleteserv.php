@@ -1,17 +1,31 @@
 <?php
-    session_start();
-    $success = "";
+session_start();
+$success = "";
 
-    $conn = mysqli_connect("localhost", "root", "");
-    $db = mysqli_select_db($conn, "foodrecs");
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+    header("Location: login.php");
+    exit();
+}
+  
+if (isset($_POST['logout'])) {
+session_destroy();
+unset($_SESSION['acc_id']);
+header("Location: login.php");
+}
 
-    if (isset($_POST['submit'])) {
-        $email = $_POST['acc_email'];
-        $password = $_POST['acc_password'];
+// Include the database configuration
+require 'config.php';
 
-        // Retrieve the account ID based on email
-        $accountQuery = mysqli_query($conn, "SELECT acc_id, acc_password FROM account WHERE acc_email='$email'");
-        $accountData = mysqli_fetch_assoc($accountQuery);
+if (isset($_POST['submit'])) {
+    $email = $_POST['acc_email'];
+    $password = $_POST['acc_password'];
+
+    try {
+        // Retrieve the account ID and hashed password based on email
+        $stmt = $conn->prepare("SELECT acc_id, acc_password FROM account WHERE acc_email = :email");
+        $stmt->execute(['email' => $email]);
+        $accountData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($accountData) {
             $hashedPassword = $accountData['acc_password'];
@@ -19,20 +33,17 @@
 
             // Check if the entered password is correct
             if (password_verify($password, $hashedPassword)) {
-                // Delete from account table using acc_id
-                $accountDeleteQuery = "DELETE FROM account WHERE acc_id='$accountId'";
-                $accountResult = mysqli_query($conn, $accountDeleteQuery);
+                // Delete the account using acc_id
+                $deleteStmt = $conn->prepare("DELETE FROM account WHERE acc_id = :accountId");
+                $deleteStmt->execute(['accountId' => $accountId]);
 
-                // $profileDeleteQuery = "DELETE FROM user_profile WHERE acc_id='$accountId'";
-                // $profileResult = mysqli_query($conn, $profileDeleteQuery);
-
-                if ($accountResult) {
+                if ($deleteStmt->rowCount() > 0) {
                     echo "<script>
                         alert('Account deleted successfully!');
                         window.location.href = 'chooseuser.php';
                       </script>";
                 } else {
-                    echo "Error deleting record: " . $conn->error;
+                    echo "Error deleting record.";
                 }
             } else {
                 $success = "Please enter the correct information.";
@@ -40,7 +51,8 @@
         } else {
             $success = "Account not found.";
         }
-
-        $conn->close();
+    } catch (PDOException $e) {
+        echo "Database error: " . $e->getMessage();
     }
+}
 ?>

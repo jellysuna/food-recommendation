@@ -1,7 +1,6 @@
 <?php
 
-$conn = mysqli_connect("localhost", "root", "");
-$db = mysqli_select_db($conn, "foodrecs");
+require 'config.php';
 
 $query = mysqli_query($conn, "SELECT acc_name, acc_email, user_age, user_gender, user_height, user_weight FROM account");
 

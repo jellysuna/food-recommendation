@@ -1,10 +1,7 @@
 <?php
 include("loginserv.php");
 
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
+include("config.php"); 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
@@ -17,9 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $note = $_POST["note"];
 
     try {
-        $conn = new PDO("mysql:host=$sName;dbname=$dbname", $uName, $pass);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         $stmt = $conn->prepare("INSERT INTO `savedrecipe`(`acc_id`, `recipe_name`, `recipe_ingredients`,  `recipe_preptime`, `recipe_calories`, `recipe_instruction`, `savedrecipe_desc`) VALUES (:acc_id, :name, :ingredients, :prepTime, :calories, :instructions, :note)");
 
         // Bind parameters

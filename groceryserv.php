@@ -1,17 +1,19 @@
 <?php
 include("loginserv.php");
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
 
-try {
-    $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-
-    $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Connection failed : ". $e->getMessage();
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+    header("Location: login.php");
+    exit();
 }
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['acc_id']);
+    header("Location: login.php");
+}
+
+require 'config.php';
 
 if(isset($_POST['grocery_items'])) {
     $acc_id = $_SESSION['acc_id'];
@@ -26,5 +28,4 @@ if(isset($_POST['grocery_items'])) {
         echo 'error';
     }
 } 
-
 ?>

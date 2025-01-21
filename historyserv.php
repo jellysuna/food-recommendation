@@ -1,10 +1,7 @@
 <?php
 include("loginserv.php");
 
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
+include("config.php"); 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
@@ -17,10 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $historyNote = $_POST["historyNote"];
 
     try {
-        // Establish a connection to the database
-        $conn = new PDO("mysql:host=$sName;dbname=$dbname", $uName, $pass);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         $stmt = $conn->prepare("INSERT INTO `history`(`acc_id`, `recipe_name`, `recipe_ingredients`,  `recipe_preptime`, `recipe_calories`, `recipe_instruction`, `history_note`) VALUES (:acc_id, :name, :ingredients, :prepTime, :calories, :instructions, :historyNote)");
 
         // Bind parameters

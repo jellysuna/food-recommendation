@@ -1,17 +1,19 @@
 <?php
 include("loginserv.php");
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
 
-try {
-  $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-  echo "Connection failed : " . $e->getMessage();
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+  header("Location: login.php");
+  exit();
 }
+
+if (isset($_POST['logout'])) {
+  session_destroy();
+  unset($_SESSION['acc_id']);
+  header("Location: login.php");
+}
+
+require 'config.php';
 
 if (isset($_POST['save-note'])) {
   $savedrecipe_id = $_POST['savedrecipe_id'];
@@ -69,7 +71,6 @@ $savedRecipes->execute([$acc_id]);
       font-family: 'Poppin', sans-serif;
     }
 
-
     body {
       background-color: #b7adde;
       height: 100%;
@@ -108,7 +109,6 @@ $savedRecipes->execute([$acc_id]);
     }
 
     nav {
-
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -227,7 +227,6 @@ $savedRecipes->execute([$acc_id]);
       transition: all 0.2s ease;
     }
 
-
     .input-field input:is(:focus, :valid)~i {
       color: #4070f4;
     }
@@ -252,7 +251,6 @@ $savedRecipes->execute([$acc_id]);
     .space {
       margin-top: 10px;
     }
-
 
     .content h2 {
       font-size: 35px;
@@ -327,7 +325,6 @@ $savedRecipes->execute([$acc_id]);
       padding-top: 15px;
       margin-top: 20px;
       padding: 10px 30px 15px;
-
     }
 
     /* Apply styles to every even-numbered (2nd, 4th, 6th, etc.) feedback entry */
@@ -416,7 +413,6 @@ $savedRecipes->execute([$acc_id]);
       height: fit-content;
       width: fit-content;
       margin-right: 10px;
-      /* Adjusted margin */
       margin-top: 10px;
     }
 
@@ -486,7 +482,6 @@ $savedRecipes->execute([$acc_id]);
   </div>
   <div class="space"></div>
 
-
   <div class="container2">
     <div class="forms">
       <?php
@@ -532,7 +527,6 @@ $savedRecipes->execute([$acc_id]);
                     class="edit-saved-note" style="display:none;" rows="3"
                     cols="70"><?php echo $recipeEntry['savedrecipe_desc']; ?></textarea>
                 </p>
-
               </div>
 
               <div class="button-container">
@@ -546,8 +540,8 @@ $savedRecipes->execute([$acc_id]);
                   <button class="save-button" type="submit" name="save-note" id="save-button-<?php echo $entryCount; ?>"
                     style="display:none;">Save</button>
                 </form>
-
               </div>
+              
             </div>
           </form>
         </div>

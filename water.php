@@ -1,22 +1,23 @@
 <?php
-
 include("loginserv.php");
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
+include("config.php");
 
-try {
-  $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-  echo "Connection failed : " . $e->getMessage();
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+  header("Location: login.php");
+  exit();
 }
+
+if (isset($_POST['logout'])) {
+  session_destroy();
+  unset($_SESSION['acc_id']);
+  header("Location: login.php");
+}
+
+// Initialize total_water_consumed if not already set
 if (!isset($_SESSION['total_water_consumed'])) {
   $_SESSION['total_water_consumed'] = 0;
 }
-
 
 $acc_id = $_SESSION['acc_id'];
 $waterintake = $conn->prepare("SELECT SUM(water_consumed) AS total_water_consumed FROM waterintake WHERE acc_id = ?");
@@ -59,7 +60,6 @@ if (isset($_SESSION['acc_id'])) {
       font-family: 'Poppin', sans-serif;
     }
 
-
     body {
       background-color: #b7adde;
       height: 100%;
@@ -98,7 +98,6 @@ if (isset($_SESSION['acc_id'])) {
     }
 
     nav {
-
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -143,7 +142,6 @@ if (isset($_SESSION['acc_id'])) {
       margin-bottom: 40px;
     }
 
-
     .containertxt.active .forms {
       height: 600px;
     }
@@ -176,7 +174,6 @@ if (isset($_SESSION['acc_id'])) {
       font-size: 30px;
       transition: all 0.2s ease;
     }
-
 
     .input-field input:is(:focus, :valid)~i {
       color: #4070f4;
@@ -345,7 +342,6 @@ if (isset($_SESSION['acc_id'])) {
     }
   </style>
 
-
   <title>Food Recommendation System</title>
 </head>
 
@@ -361,8 +357,9 @@ if (isset($_SESSION['acc_id'])) {
 
   <div class="content">
     <h2>Your water intake today is <span class="white-text">
-        <?= $total_water_consumed ?> ml
-      </span> out of <span class="white-text">2000 ml</span></h2>
+      <?= $total_water_consumed ?> ml
+      </span> out of <span class="white-text">2000 ml</span>
+    </h2>
   </div>
   <div class="space"></div>
 
@@ -373,11 +370,9 @@ if (isset($_SESSION['acc_id'])) {
         <?= (2000 - $total_water_consumed) ?> ml remaining
       </h3>
       <progress id="waterProgress" value="<?= $total_water_consumed ?>" max="2000"></progress>
-
     </div>
 
     <div class="glass-container">
-
     </div>
 
     <div class="input-field reset">
@@ -523,7 +518,6 @@ if (isset($_SESSION['acc_id'])) {
       resetGlasses();
     }
 
-
     function resetGlasses() {
       const glasses = document.querySelectorAll('.glass');
       glasses.forEach((g) => {
@@ -581,5 +575,4 @@ if (isset($_SESSION['acc_id'])) {
 
 
 </body>
-
 </html>
