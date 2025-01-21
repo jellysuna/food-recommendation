@@ -4,7 +4,6 @@ $conn = mysqli_connect("localhost", "root", "");
 $db = mysqli_select_db($conn, "foodrecs");
 
 $query = mysqli_query($conn, "SELECT admin_name, admin_email FROM `admin`");
-
 ?>
 
 <!DOCTYPE html>
@@ -128,8 +127,8 @@ $query = mysqli_query($conn, "SELECT admin_name, admin_email FROM `admin`");
         }
     </style>
 </head>
-<body>
 
+<body>
 <div class="container1">
     <nav>
         <div class="logo">
@@ -162,7 +161,6 @@ $query = mysqli_query($conn, "SELECT admin_name, admin_email FROM `admin`");
                     } else {
                         echo "Not logged in";
                     }
-
                     ?>
                 </form>
 
@@ -182,11 +180,9 @@ $query = mysqli_query($conn, "SELECT admin_name, admin_email FROM `admin`");
                     }
                     ?>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-
 </body>
 </html>

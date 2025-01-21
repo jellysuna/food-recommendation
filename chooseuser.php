@@ -5,9 +5,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <!-- ===== Iconscout CSS ===== -->
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
@@ -25,7 +25,6 @@
       font-family: 'Poppins', sans-serif;
       margin-bottom: 15px;
     }
-
 
     @media screen and (min-width: 601px) and (max-width: 900px) {
       .welcome {
@@ -77,15 +76,12 @@
       color: #433e58;
       margin-top: 60px;
       margin-left: 60px;
-
     }
 
     .logo img {
       max-height: 28px;
       margin-top: 60px;
-
     }
-
 
     .logo-text {
       margin-top: 80px;
@@ -143,7 +139,6 @@
       flex-direction: column;
       justify-content: center;
       transition: background-color 0.2s ease;
-
     }
 
     .space {
@@ -154,8 +149,8 @@
       text-decoration: none;
     }
   </style>
-  <title>Welcome to Dishcover!</title>
 
+  <title>Welcome to Dishcover!</title>
 </head>
 
 <body>
@@ -183,10 +178,7 @@
         <p class="user">User</p>
       </a>
     </div>
-
   </div>
 </body>
-
-</html>
 
 </html>

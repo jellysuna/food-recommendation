@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo '<script>
                     alert("Admin username is already taken.");
                     window.location.href = "admin-editacc.php"; // Redirect to the registration page
-                  </script>';
+             </script>';
     } else {
         $update_query = "UPDATE `admin` SET admin_name = '$new_admin_name' WHERE admin_id = $admin_id";
 
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<!doctype html
+<!doctype html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -50,8 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Edit</title>
     <link rel="stylesheet" type="text/css" href="editacc1.css">
 </head>
-<body>
 
+<body>
 <div class="container">
     <div class="forms">
         <div class="form login">

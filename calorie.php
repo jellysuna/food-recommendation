@@ -112,10 +112,8 @@ $remainingCalories = max(0, $userCalorie - $totalCaloriesConsumed);
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
         * {
-
             font-family: 'Poppin', sans-serif;
         }
-
 
         body {
             background-color: #b7adde;
@@ -149,7 +147,6 @@ $remainingCalories = max(0, $userCalorie - $totalCaloriesConsumed);
         }
 
         nav {
-
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -193,16 +190,16 @@ $remainingCalories = max(0, $userCalorie - $totalCaloriesConsumed);
         }
 
         .progress-bar {
-    margin-left: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 330px;
-    height: 330px;
-    border-radius: 50%;
-    background: radial-gradient(closest-side, #b7adde 65%, transparent 10% 10%), conic-gradient(<?php echo "#92DDE6 {$percentageConsumed}%, #42ACAD 0"; ?>%);
-}
-
+            margin-left: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 330px;
+            height: 330px;
+            border-radius: 50%;
+            background: radial-gradient(closest-side, #b7adde 65%, transparent 10% 10%), 
+            conic-gradient(<?php echo "#92DDE6 {$percentageConsumed}%, #42ACAD 0"; ?>%);
+        }
 
         .details {
             background-color: #fff;
@@ -260,7 +257,6 @@ $remainingCalories = max(0, $userCalorie - $totalCaloriesConsumed);
             border: 1px solid #999;
             color: #999;
         }
-
 
         .delete-form {
             margin-left: 10px;
@@ -355,7 +351,8 @@ $remainingCalories = max(0, $userCalorie - $totalCaloriesConsumed);
         <nav>
             <div class="logo">
                 <a href="login-access.php">
-                    <img src="img/0.1.png" alt="Logo"></a>
+                    <img src="img/0.1.png" alt="Logo">
+                </a>
             </div>
         </nav>
     </div>
@@ -423,7 +420,6 @@ $remainingCalories = max(0, $userCalorie - $totalCaloriesConsumed);
                     <input type="button" value="Reset" onclick="resetMeals()">
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -506,53 +502,53 @@ $remainingCalories = max(0, $userCalorie - $totalCaloriesConsumed);
         }
 
         function addMeal() {
-        var mealName = prompt("Enter the meal name:");
-        var calorieContent = prompt("Enter the calorie content:");
+            var mealName = prompt("Enter the meal name:");
+            var calorieContent = prompt("Enter the calorie content:");
 
-        if (mealName && calorieContent) {
-            // Validate calorie content input (positive integer)
-            if (!isNumeric(calorieContent) || calorieContent <= 0 || Math.floor(calorieContent) !== parseFloat(calorieContent)) {
-                alert('Error: Invalid calorie content. Please enter a positive integer.');
-                return;
+            if (mealName && calorieContent) {
+                // Validate calorie content input (positive integer)
+                if (!isNumeric(calorieContent) || calorieContent <= 0 || Math.floor(calorieContent) !== parseFloat(calorieContent)) {
+                    alert('Error: Invalid calorie content. Please enter a positive integer.');
+                    return;
+                }
+
+                // Create a new form element
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = 'calorie.php'; 
+
+                // Create hidden input fields for meal_name and calories_consumed
+                var mealNameInput = document.createElement('input');
+                mealNameInput.type = 'hidden';
+                mealNameInput.name = 'meal_name';
+                mealNameInput.value = mealName;
+
+                var calorieContentInput = document.createElement('input');
+                calorieContentInput.type = 'hidden';
+                calorieContentInput.name = 'calories_consumed';
+                calorieContentInput.value = calorieContent;
+
+                // Create a submit button
+                var submitButton = document.createElement('input');
+                submitButton.type = 'submit';
+                submitButton.name = 'submit';
+                submitButton.style.display = 'none';
+
+                // Append input fields and submit button to the form
+                form.appendChild(mealNameInput);
+                form.appendChild(calorieContentInput);
+                form.appendChild(submitButton);
+
+                // Append the form to the document and submit it
+                document.body.appendChild(form);
+                submitButton.click();
+                updateRemainingCalories();
             }
-
-            // Create a new form element
-            var form = document.createElement('form');
-            form.method = 'post';
-            form.action = 'calorie.php'; 
-
-            // Create hidden input fields for meal_name and calories_consumed
-            var mealNameInput = document.createElement('input');
-            mealNameInput.type = 'hidden';
-            mealNameInput.name = 'meal_name';
-            mealNameInput.value = mealName;
-
-            var calorieContentInput = document.createElement('input');
-            calorieContentInput.type = 'hidden';
-            calorieContentInput.name = 'calories_consumed';
-            calorieContentInput.value = calorieContent;
-
-            // Create a submit button
-            var submitButton = document.createElement('input');
-            submitButton.type = 'submit';
-            submitButton.name = 'submit';
-            submitButton.style.display = 'none';
-
-            // Append input fields and submit button to the form
-            form.appendChild(mealNameInput);
-            form.appendChild(calorieContentInput);
-            form.appendChild(submitButton);
-
-            // Append the form to the document and submit it
-            document.body.appendChild(form);
-            submitButton.click();
-            updateRemainingCalories();
         }
-    }
 
-    function isNumeric(value) {
-        return !isNaN(parseFloat(value)) && isFinite(value);
-    }
+        function isNumeric(value) {
+            return !isNaN(parseFloat(value)) && isFinite(value);
+        }
 
         function updateRemainingCalories() {
             // Fetch the updated remaining calories from the server

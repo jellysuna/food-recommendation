@@ -25,7 +25,6 @@ function formatActivityLevel($level)
     return ucwords(str_replace("_", " ", $level));
 }
 
-$qu
 ?>
 
 <!DOCTYPE html>
@@ -36,122 +35,123 @@ $qu
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <title>Profile</title>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #b7adde;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-.login {
-    width: 500px;
-    border-radius: 10px;
-    background-color: #fff;
-    padding: 20px 50px 45px;
-    margin: 30px auto;
-    margin-top: 60px;
-}
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #b7adde;
+        }
 
-.form .button {
-    margin-top: 35px;
-}
+        .login {
+            width: 500px;
+            border-radius: 10px;
+            background-color: #fff;
+            padding: 20px 50px 45px;
+            margin: 30px auto;
+            margin-top: 60px;
+        }
 
-.form .button input {
-    border: none;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 500;
-    size: 100px;
-    letter-spacing: 1px;
-    border-radius: 6px;
-    background-color: #a99cdf;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    height: 30px;
-    width: 150px;
-}
+        .form .button {
+            margin-top: 35px;
+        }
 
-.button input:hover {
-    background-color: #b7adde;
-}
+        .form .button input {
+            border: none;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            size: 100px;
+            letter-spacing: 1px;
+            border-radius: 6px;
+            background-color: #a99cdf;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 30px;
+            width: 150px;
+        }
 
-.form .input-field {
-    position: relative;
-    height: 1px;
-    width: 100%;
-    margin-top: 30px;
-}
+        .button input:hover {
+            background-color: #b7adde;
+        }
 
-.container .form .title {
-    position: relative;
-    font-size: 27px;
-    font-weight: 600;
-}
+        .form .input-field {
+            position: relative;
+            height: 1px;
+            width: 100%;
+            margin-top: 30px;
+        }
 
-.form .title::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 3px;
-    width: 30px;
-    background-color: #b7adde;
-    border-radius: 25px;
-}
+        .container .form .title {
+            position: relative;
+            font-size: 27px;
+            font-weight: 600;
+        }
 
-.space {
-    margin-top: 40px;
-    margin-right: 60px;
-}
+        .form .title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 3px;
+            width: 30px;
+            background-color: #b7adde;
+            border-radius: 25px;
+        }
 
-nav {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 20px;
-}
+        .space {
+            margin-top: 40px;
+            margin-right: 60px;
+        }
 
-.logo a {
-    font-size: 28px;
-    text-decoration: none;
-    font-family: cookie;
-    font-weight: bold;
-    color: #433e58;
-}
+        nav {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 20px;
+        }
 
-.logo img {
-    max-height: 28px;
-}
+        .logo a {
+            font-size: 28px;
+            text-decoration: none;
+            font-family: cookie;
+            font-weight: bold;
+            color: #433e58;
+        }
 
-.container1 {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    margin-top: 30px;
-    margin-left: 60px;
-    width: 100%;
-}
+        .logo img {
+            max-height: 28px;
+        }
 
-.container {
-    margin-top: 40px;
-    margin-left: 300px;
-}
+        .container1 {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            margin-top: 30px;
+            margin-left: 60px;
+            width: 100%;
+        }
 
-.label {
-    font-weight: 550;
-    color: #433e58;
-}
-</style>
+        .container {
+            margin-top: 40px;
+            margin-left: 300px;
+        }
+
+        .label {
+            font-weight: 550;
+            color: #433e58;
+        }
+    </style>
 </head>
 
 <body>
@@ -211,7 +211,7 @@ nav {
                 </div>
                 <div  class="space"></div>
 
-                    <div class="input-field button">
+                <div class="input-field button">
                     <form method="post">
                         <input type="submit" name="logout"value="Log out"></input>
                     </form>

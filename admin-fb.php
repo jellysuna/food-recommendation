@@ -26,6 +26,7 @@ $feedback = $conn->query("SELECT *, account.acc_name FROM feedback JOIN account 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
   <title>Show</title>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
@@ -35,7 +36,6 @@ $feedback = $conn->query("SELECT *, account.acc_name FROM feedback JOIN account 
       box-sizing: border-box;
       font-family: 'Poppin', sans-serif;
     }
-
 
     body {
       background-color: #b7adde;
@@ -75,7 +75,6 @@ $feedback = $conn->query("SELECT *, account.acc_name FROM feedback JOIN account 
     }
 
     nav {
-
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -184,7 +183,6 @@ $feedback = $conn->query("SELECT *, account.acc_name FROM feedback JOIN account 
       outline: none;
       font-size: 16px;
       border-radius: 10px;
-
       border-top: 2px solid transparent;
       transition: all 0.2s ease;
       align-self: flex-start;
@@ -225,7 +223,6 @@ $feedback = $conn->query("SELECT *, account.acc_name FROM feedback JOIN account 
     .space {
       margin-top: 10px;
     }
-
 
     .content h2 {
       padding-top: 30px;
@@ -300,7 +297,6 @@ $feedback = $conn->query("SELECT *, account.acc_name FROM feedback JOIN account 
       padding-top: 15px;
       margin-top: 20px;
       padding: 10px 30px 15px;
-
     }
 
     /* Apply styles to every even-numbered (2nd, 4th, 6th, etc.) feedback entry */
@@ -394,18 +390,20 @@ $feedback = $conn->query("SELECT *, account.acc_name FROM feedback JOIN account 
 </head>
 
 <body>
-
   <div class="container">
     <nav>
       <div class="logo">
         <a href="admin-page.php">
-          <img src="img/0.1.png" alt="Logo"></a>
+          <img src="img/0.1.png" alt="Logo">
+        </a>
       </div>
     </nav>
   </div>
+
   <div class="content">
     <h2>User Feedback</h2>
   </div>
+
   <div class="container2">
     <div class="forms">
       <br>
@@ -436,7 +434,6 @@ $feedback = $conn->query("SELECT *, account.acc_name FROM feedback JOIN account 
             <small>
               <?php echo $submitfeedback['feedback_date'] ?>
             </small>
-
           </div>
         </div>
         <?php $entryCount++; // Increment the loop counter for the next entry ?>

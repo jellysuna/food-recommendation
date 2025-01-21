@@ -51,6 +51,7 @@ if (isset($_POST["submit"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <title>Add Recipe</title>
+
     <style>
         /* ===== Google Font Import - Poformsins ===== */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -231,7 +232,7 @@ if (isset($_POST["submit"])) {
             display: flex;
         }
 
-        @media (max-width: 800px) {
+        @media screen (max-width: 800px) {
             .logo {
                 display: none;
             }
@@ -245,7 +246,7 @@ if (isset($_POST["submit"])) {
             font-family: cookie;
         }
 
-        @media (max-width: 800px) {
+        @media screen (max-width: 800px) {
             .logo-text {
                 display: none;
             }
@@ -267,10 +268,12 @@ if (isset($_POST["submit"])) {
         <nav>
             <div class="logo">
                 <a href="admin-page.php">
-                    <img src="img/0.1.png" alt="Logo"></a>
+                    <img src="img/0.1.png" alt="Logo">
+                </a>
             </div>
         </nav>
     </div>
+    
     <div class="form">
         <div class="space2"></div>
 
