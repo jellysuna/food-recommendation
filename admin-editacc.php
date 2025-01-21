@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 
     <title>Edit</title>
-    <link rel="stylesheet" type="text/css" href="editacc1.css">
+    <link rel="stylesheet" type="text/css" href="edit-user.css">
 </head>
 
 <body>

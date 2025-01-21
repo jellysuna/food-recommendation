@@ -204,10 +204,10 @@ function formatActivityLevel($level)
                     ?>
                 </form>
                 <div class="input-field button">
-                    <input type="button"  value="Edit Account" onclick="location.href='editacc.php'">
+                    <input type="button"  value="Edit Account" onclick="location.href='edit-user.php'">
                 </div>
                 <div class="input-field button">
-                    <input type="button"  value="Delete Account" onclick="location.href='delete.php'">
+                    <input type="button"  value="Delete Account" onclick="location.href='delete-user.php'">
                 </div>
                 <div  class="space"></div>
 

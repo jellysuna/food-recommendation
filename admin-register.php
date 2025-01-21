@@ -50,7 +50,7 @@ if(isset($_POST["submit"])){
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 
     <title>Register </title>
-    <link rel="stylesheet" type="text/css" href="login1.css">
+    <link rel="stylesheet" type="text/css" href="login.css">
 </head>
 
 <body>
