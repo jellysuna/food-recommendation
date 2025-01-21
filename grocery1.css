@@ -41,7 +41,6 @@ body {
 }
 
 nav {
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -76,8 +75,6 @@ nav {
   margin: 0 150px;
   padding-top: 25px;
 }
-
-
 
 .containertxt.active .forms {
   height: 600px;
@@ -162,9 +159,7 @@ nav {
   max-width: 750px;
   padding-left: 150px;
   color: #433e58;
-
 }
-
 
 .buttons .btn2:hover {
   background: transparent;
@@ -182,13 +177,11 @@ nav {
   cursor: pointer;
 }
 
-
 .checkbox-text {
   display: flex;
   align-items: center;
   margin-top: 5px;
   text-decoration: line-through;
-
 }
 
 input[type="checkbox"] {
@@ -203,7 +196,6 @@ label {
   font-size: 16px;
   margin-bottom: 0;
 }
-
 
 .grocery-text {
   font-size: 16px;

@@ -39,8 +39,6 @@ body{
     transition: height 0.2s ease;
 }
 
-
-
 .container.active .login{
     margin-left: -50%;
     opacity: 0;
@@ -51,6 +49,7 @@ body{
     opacity: 0;
     transition: opacity 0.09s ease;
 }
+
 .container.active .signup{
     opacity: 1;
     transition: opacity 0.2s ease;
@@ -59,6 +58,7 @@ body{
 .container.active .forms{
     height: 200px;
 }
+
 .container .form .title{
     position: relative;
     font-size: 27px;
@@ -147,6 +147,7 @@ body{
     color: #4070f4;
     text-decoration: none;
 }
+
 .form a:hover{
     text-decoration: underline;
 }
@@ -188,30 +189,30 @@ body{
     size: 40px;
   }
   
-  @media (max-width: 800px) {
+@media (max-width: 800px) {
     .logo {
-      display: none; 
+        display: none; 
     }
-  }
+}
 
-  .logo-text {
+.logo-text {
     margin-top: 10px;
     font-size: 32px;
     font-weight: bold;
     color: #332c38;
     font-family: cookie;
-  }
-  @media (max-width: 800px) {
-    .logo-text {
-      display: none; 
-    }
-  }
+}
 
-  .space {
+@media (max-width: 800px) {
+    .logo-text {
+        display: none; 
+    }
+}
+
+.space {
     margin-top: 30px; 
     margin-right: 60px;
 }
-
 
 .cancel-button {
     display: inline-block;

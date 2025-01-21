@@ -7,7 +7,6 @@
   font-family: 'Poppin', sans-serif;
 }
 
-
 body {
   background-color: #b7adde;
   height: 100%;
@@ -169,7 +168,6 @@ nav {
   transition: all 0.2s ease;
 }
 
-
 .input-field input:is(:focus, :valid)~i {
   color: #4070f4;
 }
@@ -194,7 +192,6 @@ nav {
 .space {
   margin-top: 10px;
 }
-
 
 .content h2 {
   font-size: 35px;

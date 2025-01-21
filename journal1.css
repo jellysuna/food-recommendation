@@ -7,7 +7,6 @@
   font-family: 'Poppin', sans-serif;
 }
 
-
 body {
   background-color: #b7adde;
   height: 100%;
@@ -46,7 +45,6 @@ body {
 }
 
 nav {
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -284,7 +282,6 @@ nav {
   padding-top: 15px;
   margin-top: 20px;
   padding: 10px 30px 15px;
-
 }
 
 .container2 .submit-fb:nth-child(even) {
