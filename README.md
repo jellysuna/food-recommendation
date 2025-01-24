@@ -30,3 +30,12 @@ The path to `recipes.csv` is set in the `config.py` file. Update the `DATA_PATH`
 
 ### Database Configuration (config.php)
 The database connection settings are managed in `config.php`.
+
+## Technologies Used
+- HTML
+- CSS
+- JavaScript
+- PHP
+- MySQL
+- Python
+- Flask
