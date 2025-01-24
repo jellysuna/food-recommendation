@@ -1,5 +1,5 @@
 <?php
-include 'groceryserv.php';
+include 'groceryserv.php'; 
 
 if (isset($_POST['remove-item'])) {
     $itemId = $_POST['grocery_id'];

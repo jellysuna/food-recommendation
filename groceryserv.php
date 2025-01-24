@@ -1,5 +1,5 @@
 <?php
-include("loginserv.php");
+include("loginserv.php"); 
 
 // Check if the user is logged in
 if (!isset($_SESSION['acc_id'])) {
