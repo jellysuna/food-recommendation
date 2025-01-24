@@ -565,4 +565,4 @@ $remainingCalories = max(0, $userCalorie - $totalCaloriesConsumed);
 
 </body>
 
-</html>
+</html> 
