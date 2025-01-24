@@ -18,7 +18,6 @@
       font-family: 'Poppin', sans-serif;
     }
 
-
     body {
       background-color: #b7adde;
       height: 100%;
