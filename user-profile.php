@@ -15,10 +15,38 @@ if (isset($_POST['logout'])) {
 
 require 'config.php';
 
-$conn = mysqli_connect("localhost", "root", "");
-$db = mysqli_select_db($conn, "foodrecs");
+// Retrieve user data if logged in
+if (isset($_SESSION['acc_id'])) {
+    $acc_id = $_SESSION['acc_id'];
 
-$query = mysqli_query($conn, "SELECT acc_name, acc_email, user_age, user_gender, user_height, user_weight FROM account");
+    try {
+        // Prepare the query
+        $stmt = $conn->prepare("SELECT acc_name, acc_email, user_age, user_gender, user_height, user_weight, activity_level FROM account WHERE acc_id = :acc_id");
+        // Bind the acc_id parameter
+        $stmt->bindParam(':acc_id', $acc_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Fetch the result
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            $username = $row['acc_name'];
+            $email = $row['acc_email'];
+            $age = $row['user_age'];
+            $gender = $row['user_gender'];
+            $height = $row['user_height'];
+            $weight = $row['user_weight'];
+            $user_activity_level = $row['activity_level'];
+            $formatted_activity_level = formatActivityLevel($user_activity_level);
+        } else {
+            echo "User information not found";
+        }
+    } catch (PDOException $e) {
+        echo "Error fetching user data: " . $e->getMessage();
+    }
+} else {
+    echo "Not logged in";
+}
 
 function formatActivityLevel($level)
 {
@@ -169,38 +197,17 @@ function formatActivityLevel($level)
             <div class="form login">
                 <span class="title">My Profile</span>
                 <div  class="space"></div>
-
                 <form action="" method="">
                     <?php
-                    if (isset($_SESSION['acc_id'])) {
-                        $acc_id = $_SESSION['acc_id'];
-                        $query = mysqli_query($conn, "SELECT acc_name, acc_email, user_age, user_gender, user_height, user_weight, activity_level FROM account WHERE acc_id = $acc_id");
-
-                        // Check if a result was found
-                        if ($row = mysqli_fetch_assoc($query)) {
-                            $username = $row['acc_name'];
-                            $email = $row['acc_email'];
-                            $age = $row['user_age'];
-                            $gender = $row['user_gender'];
-                            $height = $row['user_height'];
-                            $weight = $row['user_weight'];
-                            $user_activity_level = $row['activity_level'];
-                            $formatted_activity_level = formatActivityLevel($user_activity_level);
-                            echo "<span class='label'>Name:</span> " . $username . "<br/>";
-                            echo "<span class='label'>Email:</span> " . $email . "<br/>";
-                            echo "<span class='label'>Age:</span> " . $age . "<br/>";
-                            echo "<span class='label'>Gender:</span> " . $gender . "<br/>";
-                            echo "<span class='label'>Weight:</span> " . $weight . "<br/>";
-                            echo "<span class='label'>Height:</span> " . $height . "<br/>";
-                            echo "<span class='label'>Activity Level:</span> " . $formatted_activity_level . "<br/><br/><br/>";
-
-                        } else {
-                            echo "User information not found";
-                        }
-                    } else {
-                        echo "Not logged in";
+                    if (isset($username)) { // Check if data is fetched
+                        echo "<span class='label'>Name:</span> " . $username . "<br/>";
+                        echo "<span class='label'>Email:</span> " . $email . "<br/>";
+                        echo "<span class='label'>Age:</span> " . $age . "<br/>";
+                        echo "<span class='label'>Gender:</span> " . $gender . "<br/>";
+                        echo "<span class='label'>Weight:</span> " . $weight . "<br/>";
+                        echo "<span class='label'>Height:</span> " . $height . "<br/>";
+                        echo "<span class='label'>Activity Level:</span> " . $formatted_activity_level . "<br/><br/><br/>";
                     }
-
                     ?>
                 </form>
                 <div class="input-field button">
