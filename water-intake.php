@@ -573,6 +573,5 @@ if (isset($_SESSION['acc_id'])) {
 
   </script>
 
-
 </body>
 </html>

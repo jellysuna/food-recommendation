@@ -38,4 +38,4 @@ if (!isset($_SESSION['total_water_consumed'])) {
 $waterintake = $conn->prepare("SELECT * FROM `waterintake` WHERE acc_id = ? ORDER BY waterintake_id");
 $acc_id = $_SESSION['acc_id'];
 $waterintake->execute([$acc_id]);
-?>
+?> 
