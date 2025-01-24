@@ -1,19 +1,18 @@
 <?php
 include("loginserv.php");
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
+include("config.php");
 
-try {
-  $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-  echo "Connection failed : " . $e->getMessage();
+// Check if the user is logged in
+if (!isset($_SESSION['acc_id'])) {
+  header("Location: login.php");
+  exit();
 }
 
-
+if (isset($_POST['logout'])) {
+  session_destroy();
+  unset($_SESSION['acc_id']);
+  header("Location: login.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,429 +25,8 @@ try {
 
   <!-- ===== Iconscout CSS ===== -->
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+  <link rel="stylesheet" href="foodrec.css">
 
-  <!-- ===== CSS ===== -->
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppin', sans-serif;
-    }
-
-
-    body {
-      background-color: #b7adde;
-      height: 100vh;
-      font-family: 'Poppins', sans-serif;
-
-    }
-
-
-    /* Styles for small screens */
-    @media screen and (max-width: 600px) {
-      .container {
-        margin-top: auto;
-        padding: 10px;
-      }
-    }
-
-    /* Styles for medium screens */
-    @media screen and (min-width: 601px) and (max-width: 900px) {
-      .container {
-        margin-top: auto;
-        padding: 30px;
-      }
-    }
-
-    /* Styles for large screens */
-    @media screen and (min-width: 901px) {
-      .container {
-        margin-top: auto;
-        padding: 50px;
-      }
-    }
-
-    nav {
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo a {
-      font-size: 28px;
-      text-decoration: none;
-      font-family: cookie;
-      font-weight: bold;
-      color: #433e58;
-      padding-left: 20px;
-    }
-
-    .logo img {
-      max-height: 28px;
-    }
-
-    .container {
-      margin-top: 0px;
-      overflow-y: auto;
-      overflow-x: auto;
-      display: flex;
-    }
-
-    .containertxt {
-      display: flex;
-      width: 80%;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-      margin: 0 150px;
-      padding-top: 25px;
-    }
-
-    .submit-fb small {
-      color: #999;
-      font-size: 12px;
-      padding-top: 5px;
-      padding-left: 980px;
-    }
-
-    .container2 {
-      margin-top: 0px;
-      display: flex;
-      overflow-x: hidden;
-    }
-
-    .containertxt.active .forms {
-      height: 600px;
-    }
-
-    .input-field {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .input-field input {
-      width: 1100px;
-      padding-left: 20px;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      border-top: 2px solid transparent;
-      transition: all 0.2s ease;
-    }
-
-    .input-field input:is(:focus, :valid) {
-      border-bottom-color: #b7adde;
-    }
-
-    .input-field i {
-      order: -1;
-      padding-left: 30px;
-      color: #999;
-      font-size: 30px;
-      transition: all 0.2s ease;
-    }
-
-
-    .input-field input:is(:focus, :valid)~i {
-      color: #4070f4;
-    }
-
-    .input-field i.icon {
-      left: 0;
-      position: top;
-    }
-
-    .image {
-      display: flex;
-      justify-content: flex-end;
-      margin-right: 30px;
-      margin-top: 90px;
-    }
-
-    .image img {
-      max-width: 100%;
-      margin-right: 120px;
-    }
-
-    .containerss {
-      display: grid;
-      padding-left: 40px;
-      align-items: center;
-      grid-template-columns: 2fr 1.5fr 1fr;
-      column-gap: 20px;
-    }
-
-    .space {
-      margin-top: 20px;
-    }
-
-    .content h2 {
-      font-size: 40px;
-      max-width: 750px;
-      padding-left: 150px;
-      color: #433e58;
-
-    }
-
-    .button input {
-      border: none;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 500;
-      size: 100px;
-      letter-spacing: 1px;
-      border-radius: 6px;
-      background-color: #706A88;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      height: 35px;
-      width: 250px;
-      margin-left: 1128px;
-    }
-
-    .button input:hover {
-      background: transparent;
-      border: 1px solid #fff;
-      color: #fff;
-    }
-
-    .gui input {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: none;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      border-radius: 6px;
-      background-color: #b7adde;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      padding: 5px 14px;
-      height: fit-content;
-      width: fit-content;
-      margin-right: 10px;
-    }
-
-    .gui i {
-      font-size: 20px;
-      margin-bottom: 0;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .gui i:hover {
-      background: transparent;
-      color: #433e58;
-    }
-
-    .button-container {
-      display: flex;
-      padding-left: 1000px;
-    }
-
-    .container2 p {
-      color: #999;
-      font-size: 15px;
-    }
-
-    .space2 {
-      margin-bottom: 60px;
-    }
-
-    .space3 {
-      padding-bottom: 60px;
-    }
-
-    #recommendationsContainer {
-      padding-left: 40px;
-      padding-right: 40px;
-      padding-top: 5px;
-      padding-bottom: 20px;
-      align-items: center;
-      background-color: #fff;
-      border-radius: 10px;
-      margin: 0 150px;
-    }
-
-    #recommendationsContainer div {
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-
-    #recommendationsContainer strong {
-      color: #433e58;
-    }
-
-    #recommendationsContainer div:last-child hr {
-      display: none;
-    }
-
-    #recommendationsContainer hr {
-      border: none;
-      border-top: 1px solid #b7adde;
-    }
-
-    .feedback-desc {
-      padding-bottom: 10px;
-    }
-
-    .rate {
-      float: left;
-      height: 46px;
-      padding: 0 10px;
-    }
-
-    .rate:not(:checked)>input {
-      position: absolute;
-      top: -9999px;
-    }
-
-    .rate:not(:checked)>label {
-      float: right;
-      width: 1em;
-      overflow: hidden;
-      white-space: nowrap;
-      cursor: pointer;
-      font-size: 30px;
-      color: #ccc;
-    }
-
-    .rate:not(:checked)>label:before {
-      content: '★ ';
-    }
-
-    .rate>input:checked~label {
-      color: #ffc700;
-    }
-
-    .rate:not(:checked)>label:hover,
-    .rate:not(:checked)>label:hover~label {
-      color: #deb217;
-    }
-
-    .rate>input:checked+label:hover,
-    .rate>input:checked+label:hover~label,
-    .rate>input:checked~label:hover,
-    .rate>input:checked~label:hover~label,
-    .rate>label:hover~input:checked~label {
-      color: #c59b08;
-    }
-
-    #saveRecipePopup,
-    #addToHistoryPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      line-height: 1.6;
-      opacity: 1;
-    }
-
-    #saveRecipePopup p,
-    h2 {
-      color: #433e58;
-    }
-
-    #saveRecipePopup label {
-      font-weight: bold;
-      color: #433e58;
-    }
-
-    #addToHistoryPopup p,
-    h2 {
-      color: #433e58;
-    }
-
-    #addToHistoryPopup label {
-      font-weight: bold;
-      color: #433e58;
-    }
-
-    #saveRecipePopup textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    #saveRecipePopup input[type="submit"],
-    #saveRecipePopup input[type="button"] {
-
-      justify-content: center;
-      align-items: center;
-      border: none;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      border-radius: 6px;
-      background-color: #433e58;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      padding: 5px 14px;
-      height: fit-content;
-      width: fit-content;
-      margin-left: 10px;
-      margin-top: 10px;
-    }
-
-    #saveRecipePopup input[type="submit"]:hover,
-    #saveRecipePopup input[type="button"]:hover {
-      background: transparent;
-      border: 1px solid #433e58;
-      color: #433e58;
-    }
-
-    #addToHistoryPopup textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    #addToHistoryPopup input[type="submit"],
-    #addToHistoryPopup input[type="button"] {
-
-      justify-content: center;
-      align-items: center;
-      border: none;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      border-radius: 6px;
-      background-color: #433e58;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      padding: 5px 14px;
-      height: fit-content;
-      width: fit-content;
-      margin-left: 10px;
-      margin-top: 10px;
-    }
-
-    #addToHistoryPopup input[type="submit"]:hover,
-    #addToHistoryPopup input[type="button"]:hover {
-      background: transparent;
-      border: 1px solid #433e58;
-      color: #433e58;
-    }
-  </style>
   <title>Food Recommendation System</title>
 </head>
 
@@ -511,10 +89,10 @@ try {
             <strong>Your Recommendation will be generated here</strong>
         </div>
       </form>
-
     </div>
   </div>
   <div class="space3"> </div>
+
   <div id="ratingsContainerWrapper" style="display: none;">
     <div id="recommendationsContainer">
       <div class="submit-fb feedback-entry">
@@ -564,6 +142,7 @@ try {
       <input type="button" value="Cancel" href="#" onclick="clearTextarea(); hide('saveRecipePopup')">
     </form>
   </div>
+
   <div id="addToHistoryPopup" class="popup">
     <h2>Tried this? Add to History</h2>
     <div class="space"></div>
@@ -581,7 +160,6 @@ try {
       <input type="button" value="Cancel" href="#" onclick="clearTextarea(); hide('addToHistoryPopup')">
     </form>
   </div>
-
 
 
   <script>
