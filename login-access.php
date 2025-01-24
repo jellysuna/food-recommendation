@@ -645,8 +645,8 @@ require 'config.php';
 
         <div class="container4">
           <div class="link">
-            <a href="water.php" class="hire4">Water Intake</a>
-            <a href="water.php" class="grocery">
+            <a href="water-intake.php" class="hire4">Water Intake</a>
+            <a href="water-intake.php" class="grocery">
               <img src="img/waterintake.png" alt="grocery"></a>
           </div>
         </div>
