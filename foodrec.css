@@ -1,13 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-*{
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppin', sans-serif;
 }
 
-body{
-  background-color: #b7adde  ;
+body {
+  background-color: #b7adde;
   height: 100vh;
   font-family: 'Poppins', sans-serif;
 }
@@ -36,13 +37,13 @@ body{
   }
 }
 
-nav{
+nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.logo a{
+.logo a {
   font-size: 28px;
   text-decoration: none;
   font-family: cookie;
@@ -52,7 +53,7 @@ nav{
 }
 
 .logo img {
-  max-height: 28px; 
+  max-height: 28px;
 }
 
 .container {
@@ -62,7 +63,7 @@ nav{
   display: flex;
 }
 
-.containertxt{
+.containertxt {
   display: flex;
   width: 80%;
   background: #fff;
@@ -72,14 +73,27 @@ nav{
   padding-top: 25px;
 }
 
-.containertxt.active .forms{
+.submit-fb small {
+  color: #999;
+  font-size: 12px;
+  padding-top: 5px;
+  padding-left: 980px;
+}
+
+.container2 {
+  margin-top: 0px;
+  display: flex;
+  overflow-x: hidden;
+}
+
+.containertxt.active .forms {
   height: 600px;
 }
 
 .input-field {
   display: flex;
-  align-items: center; 
-  margin-bottom: 20px; 
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .input-field input {
@@ -98,17 +112,17 @@ nav{
 
 .input-field i {
   order: -1;
-  padding-left: 30px; 
+  padding-left: 30px;
   color: #999;
   font-size: 30px;
   transition: all 0.2s ease;
 }
 
-.input-field input:is(:focus, :valid) ~ i{
+.input-field input:is(:focus, :valid)~i {
   color: #4070f4;
 }
 
-.input-field i.icon{
+.input-field i.icon {
   left: 0;
   position: top;
 }
@@ -117,7 +131,7 @@ nav{
   display: flex;
   justify-content: flex-end;
   margin-right: 30px;
-  margin-top: 90px; 
+  margin-top: 90px;
 }
 
 .image img {
@@ -128,23 +142,23 @@ nav{
 .containerss {
   display: grid;
   padding-left: 40px;
-  align-items: center; 
+  align-items: center;
   grid-template-columns: 2fr 1.5fr 1fr;
   column-gap: 20px;
 }
 
 .space {
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
-.content h2{
+.content h2 {
   font-size: 40px;
   max-width: 750px;
   padding-left: 150px;
   color: #433e58;
 }
 
-.button input{
+.button input {
   border: none;
   color: #fff;
   font-size: 15px;
@@ -160,7 +174,7 @@ nav{
   margin-left: 1128px;
 }
 
-.button input:hover{
+.button input:hover {
   background: transparent;
   border: 1px solid #fff;
   color: #fff;
@@ -179,25 +193,219 @@ nav{
   background-color: #b7adde;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 5px 14px; 
-  height: fit-content; 
+  padding: 5px 14px;
+  height: fit-content;
   width: fit-content;
-  margin-right: 10px; 
+  margin-right: 10px;
+}
+
+.gui i {
+  font-size: 20px;
+  margin-bottom: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.gui i:hover {
+  background: transparent;
+  color: #433e58;
+}
+
+.button-container {
+  display: flex;
+  padding-left: 1000px;
+}
+
+.container2 p {
+  color: #999;
+  font-size: 15px;
+}
+
+.space2 {
+  margin-bottom: 60px;
+}
+
+.space3 {
+  padding-bottom: 60px;
+}
+
+#recommendationsContainer {
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 5px;
+  padding-bottom: 20px;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 0 150px;
+}
+
+#recommendationsContainer div {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#recommendationsContainer strong {
+  color: #433e58;
+}
+
+#recommendationsContainer div:last-child hr {
+  display: none;
+}
+
+#recommendationsContainer hr {
+  border: none;
+  border-top: 1px solid #b7adde;
+}
+
+.feedback-desc {
+  padding-bottom: 10px;
+}
+
+.rate {
+  float: left;
+  height: 46px;
+  padding: 0 10px;
+}
+
+.rate:not(:checked)>input {
+  position: absolute;
+  top: -9999px;
+}
+
+.rate:not(:checked)>label {
+  float: right;
+  width: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 30px;
+  color: #ccc;
+}
+
+.rate:not(:checked)>label:before {
+  content: '★ ';
+}
+
+.rate>input:checked~label {
+  color: #ffc700;
+}
+
+.rate:not(:checked)>label:hover,
+.rate:not(:checked)>label:hover~label {
+  color: #deb217;
+}
+
+.rate>input:checked+label:hover,
+.rate>input:checked+label:hover~label,
+.rate>input:checked~label:hover,
+.rate>input:checked~label:hover~label,
+.rate>label:hover~input:checked~label {
+  color: #c59b08;
+}
+
+#saveRecipePopup,
+#addToHistoryPopup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  line-height: 1.6;
+  opacity: 1;
+}
+
+#saveRecipePopup p,
+h2 {
+  color: #433e58;
+}
+
+#saveRecipePopup label {
+  font-weight: bold;
+  color: #433e58;
+}
+
+#addToHistoryPopup p,
+h2 {
+  color: #433e58;
+}
+
+#addToHistoryPopup label {
+  font-weight: bold;
+  color: #433e58;
+}
+
+#saveRecipePopup textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#saveRecipePopup input[type="submit"],
+#saveRecipePopup input[type="button"] {
+  justify-content: center;
+  align-items: center;
+  border: none;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  border-radius: 6px;
+  background-color: #433e58;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 5px 14px;
+  height: fit-content;
+  width: fit-content;
+  margin-left: 10px;
   margin-top: 10px;
 }
 
-.gui input:hover {
+#saveRecipePopup input[type="submit"]:hover,
+#saveRecipePopup input[type="button"]:hover {
   background: transparent;
-  border: 1px solid #b7adde;
-  color: #b7adde;
+  border: 1px solid #433e58;
+  color: #433e58;
 }
 
-.button-container{
-  padding-left: 1000px;
-  display: flex;
+#addToHistoryPopup textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
-.container2 p{
+
+#addToHistoryPopup input[type="submit"],
+#addToHistoryPopup input[type="button"] {
+  justify-content: center;
+  align-items: center;
+  border: none;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  border-radius: 6px;
+  background-color: #433e58;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 5px 14px;
+  height: fit-content;
+  width: fit-content;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+#addToHistoryPopup input[type="submit"]:hover,
+#addToHistoryPopup input[type="button"]:hover {
+  background: transparent;
+  border: 1px solid #433e58;
   color: #433e58;
-  padding-top: 10px;
-  font-size: 15px;
 }

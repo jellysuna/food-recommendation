@@ -1,45 +1,61 @@
 <?php
-    session_start();
-    $success = "";
+    session_start(); 
 
-    $conn = mysqli_connect("localhost", "root", "");
-    $db = mysqli_select_db($conn, "foodrecs");
+    // Check if the user is logged in
+    if (!isset($_SESSION['admin_id'])) {
+        header("Location: chooseuser.php");
+        exit();
+    }
+    
+    if (isset($_POST['logout'])) {
+        session_destroy();
+        unset($_SESSION['admin_id']);
+        header("Location: chooseuser.php");
+    }
+    
+    require 'config.php';
+    $success = "";
 
     if (isset($_POST['submit'])) {
         $email = $_POST['admin_email'];
         $password = $_POST['admin_password'];
-
-        // Retrieve the account ID based on email
-        $accountQuery = mysqli_query($conn, "SELECT admin_id, admin_password FROM `admin` WHERE admin_email='$email'");
-        $accountData = mysqli_fetch_assoc($accountQuery);
-
-        if ($accountData) {
-            $hashedPassword = $accountData['admin_password'];
-            $adminID = $accountData['admin_id'];
-
-            // Check if the entered password is correct
-            if (password_verify($password, $hashedPassword)) {
-                // Delete from account table using acc_id
-                $accountDeleteQuery = "DELETE FROM `admin` WHERE admin_id='$adminID'";
-                $accountResult = mysqli_query($conn, $accountDeleteQuery);
-
-                if ($accountResult) {
-                    echo "<script>
-                        alert('Account deleted successfully!');
-                        window.location.href = 'chooseuser.php';
-                      </script>";
+    
+        try {
+            // Retrieve the account data based on email
+            $stmt = $conn->prepare("SELECT admin_id, admin_password FROM `admin` WHERE admin_email = :email");
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+            $accountData = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            if ($accountData) {
+                $hashedPassword = $accountData['admin_password'];
+                $adminID = $accountData['admin_id'];
+    
+                // Check if the entered password is correct
+                if (password_verify($password, $hashedPassword)) {
+                    // Delete from the admin table using admin_id
+                    $deleteStmt = $conn->prepare("DELETE FROM `admin` WHERE admin_id = :admin_id");
+                    $deleteStmt->bindParam(':admin_id', $adminID, PDO::PARAM_INT);
+    
+                    if ($deleteStmt->execute()) {
+                        echo "<script>
+                            alert('Account deleted successfully!');
+                            window.location.href = 'chooseuser.php';
+                          </script>";
+                    } else {
+                        echo "Error deleting record.";
+                    }
                 } else {
-                    echo "Error deleting record: " . $conn->error;
+                    $success = "Please enter the correct information.";
                 }
             } else {
-                $success = "Please enter the correct information.";
+                $success = "Account not found.";
             }
-        } else {
-            $success = "Account not found.";
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
-
-        $conn->close();
     }
+    
 ?>
 
 <!doctype html>
@@ -52,7 +68,7 @@
          <!-- ===== Iconscout CSS ===== -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 
-    <title>Delete</title>
+    <title>Delete Admin</title>
     <link rel="stylesheet" type="text/css" href="login.css">
 </head>
 <body>
