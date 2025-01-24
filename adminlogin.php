@@ -1,6 +1,7 @@
 <?php
 session_start();
 $invalid = ""; 
+require 'config.php';
 
 if (isset($_POST["submit"])) {
     if (empty($_POST["admin_name"]) || empty($_POST['admin_password'])) {
@@ -8,29 +9,32 @@ if (isset($_POST["submit"])) {
     } else {
         $user = $_POST['admin_name'];
         $pass = $_POST['admin_password'];
-        $conn = mysqli_connect("localhost", "root", "");
-        $db = mysqli_select_db($conn, "foodrecs"); 
 
-        // Retrieve the hashed password from the database
-        $query = mysqli_query($conn, "SELECT * FROM `admin` WHERE admin_name='$user'"); 
-        $rows = mysqli_num_rows($query);
+        try {
+            // Retrieve the hashed password from the database using prepared statements
+            $stmt = $conn->prepare("SELECT * FROM `admin` WHERE admin_name = :user");
+            $stmt->bindParam(':user', $user);
+            $stmt->execute();
 
-        if ($rows == 1) {
-            $row = mysqli_fetch_assoc($query);
-            $hashed_password = $row['admin_password'];
+            if ($stmt->rowCount() === 1) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                $hashed_password = $row['admin_password'];
 
-            if (password_verify($pass, $hashed_password)) {
-                $_SESSION['admin_id'] = $row['admin_id']; 
-                header("Location: admin-page.php"); 
-                exit(); 
+                if (password_verify($pass, $hashed_password)) {
+                    $_SESSION['admin_id'] = $row['admin_id'];
+                    header("Location: admin-page.php");
+                    exit();
+                } else {
+                    $invalid = "Incorrect";
+                    echo "<script>alert('Fail: Incorrect password');</script>";
+                }
             } else {
                 $invalid = "Incorrect";
+                echo "<script>alert('Fail: No such user');</script>";
             }
-        } else {
-            $invalid = "Incorrect";
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
-
-        mysqli_close($conn);
     }
 }
 ?>
