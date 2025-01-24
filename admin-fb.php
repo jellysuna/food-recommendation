@@ -1,17 +1,19 @@
 <?php
-include("loginserv.php");
+session_start(); 
 
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
-
-try {
-  $conn = new PDO("mysql:host=$sName; dbname=$dbname", $uName, $pass);
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-  echo "Connection failed: " . $e->getMessage();
+// Check if the user is logged in
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: chooseuser.php");
+    exit();
 }
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['admin_id']);
+    header("Location: chooseuser.php");
+}
+
+require 'config.php';
 
 $feedback = $conn->query("SELECT *, account.acc_name FROM feedback JOIN account ON feedback.acc_id = account.acc_id ORDER BY feedback_id");
 ?>
@@ -25,7 +27,7 @@ $feedback = $conn->query("SELECT *, account.acc_name FROM feedback JOIN account 
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-  <title>Show</title>
+  <title>User Feedback</title>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');

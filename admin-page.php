@@ -1,3 +1,21 @@
+<?php
+session_start(); 
+
+// Check if the user is logged in
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: chooseuser.php");
+    exit();
+}
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['admin_id']);
+    header("Location: chooseuser.php");
+}
+
+require 'config.php';
+?>
+
 <!doctype html>
 <html>
 <head>
@@ -5,7 +23,7 @@
   <!-- ===== Iconscout CSS ===== -->
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 
-  <title>Login</title>
+  <title>Admin Page</title>
   <style>    
     body{
       height: 100vh;
@@ -191,10 +209,10 @@
     }
 
     .btn{
-      background: #000;
       border-radius: 6px;
+      border: 1px solid #fff;
       padding: 9px 18px;
-      text-decoration: none;
+      text: #fff;
       transition: 0.3s;
       font-size: 18px;
       display: flex;
@@ -205,6 +223,7 @@
       background: transparent;
       border: 1px solid #fff;
       color: #fff;
+      cursor: pointer;
     }
 
     .buttons .btn2:hover{
@@ -509,13 +528,9 @@
         <li><a href="#">Contact</a></li>
       </ul>
       <div class="buttons">
-        <a href="chooseuser.php" class="btn">Log out</a>
-        <?php
-          if(isset($_POST['Log out'])) {
-            session_destroy();
-            unset($_SESSION['admin_id']);
-        }
-        ?>
+        <form method="post">
+          <input type="submit" name="logout" value="Log Out" class="btn"></input>
+        </form>
       </div>
     </nav>
 
