@@ -1,40 +1,66 @@
 <?php
+session_start(); 
 
-session_start();
+// Check if the user is logged in
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: chooseuser.php");
+    exit();
+}
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['admin_id']);
+    header("Location: chooseuser.php");
+}
+
+require 'config.php';
 $admin_id = $_SESSION['admin_id'];
 
 // Fetch admin data from the database
-$conn = mysqli_connect("localhost", "root", "", "foodrecs");
-$select_query = "SELECT * FROM `admin` WHERE admin_id = $admin_id";
-$result = mysqli_query($conn, $select_query);
-$row = mysqli_fetch_assoc($result);
+try {
+    $stmt = $conn->prepare("SELECT * FROM `admin` WHERE admin_id = :admin_id");
+    $stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$admin_name = $row['admin_name'];
+    $admin_name = $row['admin_name'];
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $new_admin_name = mysqli_real_escape_string($conn, $_POST["admin_name"]);
+    try {
+        $new_admin_name = $_POST["admin_name"];
 
-    // Check if the new admin username is already taken
-    $check_query = "SELECT * FROM `admin` WHERE admin_name = '$new_admin_name' AND admin_id != $admin_id";
-    $check_result = mysqli_query($conn, $check_query);
-    $num_rows = mysqli_num_rows($check_result);
+        // Check if the new admin username is already taken
+        $check_stmt = $conn->prepare("SELECT * FROM `admin` WHERE admin_name = :new_admin_name AND admin_id != :admin_id");
+        $check_stmt->bindParam(':new_admin_name', $new_admin_name, PDO::PARAM_STR);
+        $check_stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
+        $check_stmt->execute();
 
-    if ($num_rows > 0) {
-        echo '<script>
+        if ($check_stmt->rowCount() > 0) {
+            echo '<script>
                     alert("Admin username is already taken.");
-                    window.location.href = "admin-editacc.php"; // Redirect to the registration page
-             </script>';
-    } else {
-        $update_query = "UPDATE `admin` SET admin_name = '$new_admin_name' WHERE admin_id = $admin_id";
-
-        if (mysqli_query($conn, $update_query)) {
-            header("Location: admin-profile.php");
-            exit();
+                    window.location.href = "admin-editacc.php";
+                  </script>';
         } else {
-            echo "Error updating record: " . mysqli_error($conn);
+            // Update admin name
+            $update_stmt = $conn->prepare("UPDATE `admin` SET admin_name = :new_admin_name WHERE admin_id = :admin_id");
+            $update_stmt->bindParam(':new_admin_name', $new_admin_name, PDO::PARAM_STR);
+            $update_stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
+
+            if ($update_stmt->execute()) {
+                header("Location: admin-profile.php");
+                exit();
+            } else {
+                echo "Error updating record.";
+            }
         }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
 }
+
 ?>
 
 <!doctype html>
@@ -47,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- ===== Iconscout CSS ===== -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 
-    <title>Edit</title>
+    <title>Edit Account</title>
     <link rel="stylesheet" type="text/css" href="edit-user.css">
 </head>
 
