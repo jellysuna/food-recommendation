@@ -268,4 +268,4 @@ $journal->execute([$acc_id]);
     </div>
 </body>
 
-</html>
+</html> 
