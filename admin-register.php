@@ -1,42 +1,45 @@
 <?php
-
+require 'config.php';
 $invalid=""; //Variable to Store error message;
 
-if(isset($_POST["submit"])){
-    if(empty($_POST["admin_name"]) || empty($_POST["admin_email"]) || empty($_POST["admin_password"])) {
+if (isset($_POST["submit"])) {
+    if (empty($_POST["admin_name"]) || empty($_POST["admin_email"]) || empty($_POST["admin_password"])) {
         $invalid = "Must fill all areas";
     } else {
-        $conn = mysqli_connect ("localhost", "root", "");
-        $db = mysqli_select_db($conn, "foodrecs"); 
-
-        $username=$_POST['admin_name'];
-        $email=$_POST['admin_email'];
+        $username = $_POST['admin_name'];
+        $email = $_POST['admin_email'];
         $password = password_hash($_POST['admin_password'], PASSWORD_BCRYPT); // Hash the password
 
-       //check if email or username already existed in database
-       $duplicate_query = "SELECT * FROM `admin` WHERE `admin_name` = '$username' OR `admin_email` = '$email'";
-       $duplicate_result = mysqli_query($conn, $duplicate_query);
+        try {
+            // Check if email or username already exists in the database
+            $duplicate_query = "SELECT * FROM `admin` WHERE `admin_name` = :admin_name OR `admin_email` = :admin_email";
+            $stmt = $conn->prepare($duplicate_query);
+            $stmt->bindParam(':admin_name', $username, PDO::PARAM_STR);
+            $stmt->bindParam(':admin_email', $email, PDO::PARAM_STR);
+            $stmt->execute();
 
-       if (mysqli_num_rows($duplicate_result) > 0) {
-        echo '<script>
-                alert("Email or username is already taken.");
-                window.location.href = "admin-register.php"; // Redirect to the registration page
-              </script>';
-       } else {
-            $register_query = "INSERT INTO `admin`(`admin_name`, `admin_email`, `admin_password`) VALUES ('$username', '$email', '$password')";
+            if ($stmt->rowCount() > 0) {
+                echo '<script>
+                        alert("Email or username is already taken.");
+                        window.location.href = "admin-register.php"; // Redirect to the registration page
+                      </script>';
+            } else {
+                // Insert the new admin into the database
+                $register_query = "INSERT INTO `admin`(`admin_name`, `admin_email`, `admin_password`) VALUES (:admin_name, :admin_email, :admin_password)";
+                $stmt = $conn->prepare($register_query);
+                $stmt->bindParam(':admin_name', $username, PDO::PARAM_STR);
+                $stmt->bindParam(':admin_email', $email, PDO::PARAM_STR);
+                $stmt->bindParam(':admin_password', $password, PDO::PARAM_STR);
 
-            try {
-                $register_result = mysqli_query($conn, $register_query);
-                if ($register_result && mysqli_affected_rows($conn) > 0) {
+                if ($stmt->execute()) {
                     header("Location: adminlogin.php");
                 } else {
                     echo "Registration failed";
                 }
-            } catch(Exception $ex) {
-                echo("error".$ex->getMessage());
             }
-       } 
-        
+        } catch (PDOException $ex) {
+            echo "Error: " . $ex->getMessage();
+        }
     }
 }
 
