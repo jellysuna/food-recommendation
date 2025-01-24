@@ -4,11 +4,12 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.neighbors import NearestNeighbors
 import re
+from config import DATA_PATH
 
 app = Flask(__name__)
 CORS(app, resources={r"/get_recommendations": {"origins": "http://localhost"}})
 
-df = pd.read_csv(r"C:\Users\acer\OneDrive - ums.edu.my (1)\Documents\data sc\fyp\recipes.csv")
+df = pd.read_csv(DATA_PATH)
 df = df.drop(['RecipeId', 'AuthorId', 'AuthorName', 'DatePublished', 'Description', 'Images', 'ReviewCount',
               'AggregatedRating', 'RecipeYield', 'Keywords', 'RecipeServings', 'FatContent', 'SaturatedFatContent',
               'CholesterolContent', 'SodiumContent', 'CarbohydrateContent', 'FiberContent', 'SugarContent',
