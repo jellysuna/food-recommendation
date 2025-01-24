@@ -596,4 +596,4 @@ $history->execute([$acc_id]);
   </script>
 
 </body>
-</html>
+</html> 

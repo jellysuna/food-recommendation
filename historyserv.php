@@ -1,7 +1,7 @@
 <?php
 include("loginserv.php");
 
-include("config.php"); 
+include("config.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
