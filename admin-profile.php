@@ -1,9 +1,19 @@
 <?php
 session_start(); 
-$conn = mysqli_connect("localhost", "root", "");
-$db = mysqli_select_db($conn, "foodrecs");
 
-$query = mysqli_query($conn, "SELECT admin_name, admin_email FROM `admin`");
+// Check if the user is logged in
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: chooseuser.php");
+    exit();
+}
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['admin_id']);
+    header("Location: chooseuser.php");
+}
+
+require 'config.php';
 ?>
 
 <!DOCTYPE html>
@@ -148,15 +158,23 @@ $query = mysqli_query($conn, "SELECT admin_name, admin_email FROM `admin`");
                     <?php
                     if (isset($_SESSION['admin_id'])) {
                         $admin_id = $_SESSION['admin_id'];
-                        $query = mysqli_query($conn, "SELECT admin_name, admin_email FROM `admin` WHERE admin_id = $admin_id");
 
-                        if ($row = mysqli_fetch_assoc($query)) {
-                            $username = $row['admin_name'];
-                            $email = $row['admin_email'];
-                            echo "Name: " . $username . "<br/>";
-                            echo "Email: " . $email . "<br/><br><br>";
-                        } else {
-                            echo "User information not found";
+                        try {
+                            // Use prepared statements to prevent SQL injection
+                            $stmt = $conn->prepare("SELECT admin_name, admin_email FROM `admin` WHERE admin_id = :admin_id");
+                            $stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
+                            $stmt->execute();
+
+                            if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                $username = $row['admin_name'];
+                                $email = $row['admin_email'];
+                                echo "Name: " . htmlspecialchars($username) . "<br/>";
+                                echo "Email: " . htmlspecialchars($email) . "<br/><br><br>";
+                            } else {
+                                echo "User information not found";
+                            }
+                        } catch (PDOException $e) {
+                            echo "Error: " . $e->getMessage();
                         }
                     } else {
                         echo "Not logged in";
@@ -168,17 +186,13 @@ $query = mysqli_query($conn, "SELECT admin_name, admin_email FROM `admin`");
                     <input type="button" value="Edit Account" onclick="location.href='admin-editacc.php'">
                 </div>
                 <div class="input-field button">
-                    <input type="button" value="Delete Account" onclick="location.href='admin-del.php'">
+                    <input type="button" value="Delete Account" onclick="location.href='admin-delete.php'">
                 </div>
                 <div class="space"></div>
                 <div class="input-field button">
-                    <input type="button" value="Log out" onclick="location.href='chooseuser.php'">
-                    <?php
-                    if(isset($_POST['Log out'])) {
-                        session_destroy();
-                        unset($_SESSION['admin_id']);
-                    }
-                    ?>
+                    <form method="post">
+                        <input type="submit" name="logout" value="Log Out" class="btn"></input>
+                    </form>
                 </div>
             </div>
         </div>
