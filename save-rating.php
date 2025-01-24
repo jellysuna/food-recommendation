@@ -28,4 +28,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "No rating data received<br>";
     }
 }
-?>
+?> 
