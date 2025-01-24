@@ -1,5 +1,5 @@
 <?php
-include 'deleteserv.php'
+include 'deleteserv.php' 
 ?>
 
 <!doctype html>

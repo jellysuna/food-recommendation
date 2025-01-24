@@ -14,7 +14,7 @@ unset($_SESSION['acc_id']);
 header("Location: login.php");
 }
 
-// Include the database configuration
+// Include the database configuration 
 require 'config.php';
 
 if (isset($_POST['submit'])) {
