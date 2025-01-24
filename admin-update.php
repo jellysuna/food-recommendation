@@ -1,43 +1,56 @@
 <?php
-$sName = "localhost";
-$uName = "root";
-$pass = "";
-$dbname = "foodrecs";
+session_start(); 
 
+// Check if the user is logged in
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: chooseuser.php");
+    exit();
+}
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    unset($_SESSION['admin_id']);
+    header("Location: chooseuser.php");
+}
+
+require 'config.php';
 
 if (isset($_POST["submit"])) {
-    // Database connection
-    $conn = mysqli_connect("localhost", "root", "", "foodrecs");
+    try {
+        // Retrieve data from the form
+        $recipe_name = $_POST['recipe_name'];
+        $recipe_preptime = $_POST['recipe_preptime'];
+        $recipe_ingredients = $_POST['recipe_ingredients'];
+        $recipe_instruction = $_POST['recipe_instruction'];
+        $recipe_calories = $_POST['recipe_calories'];
+        $recipe_category = $_POST['recipe_category'];
+        $recipe_ingredientsquantity = $_POST['recipe_ingredientsquantity'];
 
-    // Check connection
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
+        // Prepare an SQL query to insert data into the recipe table
+        $sql = "INSERT INTO recipe (recipe_name, recipe_instruction, recipe_preptime, recipe_calories, 
+                recipe_ingredients, recipe_category, recipe_ingredientsquantity) 
+                VALUES (:recipe_name, :recipe_instruction, :recipe_preptime, :recipe_calories, 
+                        :recipe_ingredients, :recipe_category, :recipe_ingredientsquantity)";
 
-    // Retrieve data from the form
-    $recipe_name = mysqli_real_escape_string($conn, $_POST['recipe_name']);
-    $recipe_preptime = mysqli_real_escape_string($conn, $_POST['recipe_preptime']);
-    $recipe_ingredients = mysqli_real_escape_string($conn, $_POST['recipe_ingredients']);
-    $recipe_instruction = mysqli_real_escape_string($conn, $_POST['recipe_instruction']);
-    $recipe_calories = mysqli_real_escape_string($conn, $_POST['recipe_calories']);
-    $recipe_category = mysqli_real_escape_string($conn, $_POST['recipe_category']);
-    $recipe_ingredientsquantity = mysqli_real_escape_string($conn, $_POST['recipe_ingredientsquantity']);
+        $stmt = $conn->prepare($sql);
 
-    // SQL query to insert data into the recipe table
-    $sql = "INSERT INTO `recipe` (`recipe_name`, `recipe_instruction`, `recipe_preptime`, `recipe_calories`, `recipe_ingredients`,  `recipe_category`, `recipe_ingredientsquantity`)
-            VALUES ('$recipe_name', '$recipe_instruction', '$recipe_preptime', '$recipe_calories', '$recipe_ingredients', '$recipe_category', '$recipe_ingredientsquantity')";
+        // Bind parameters
+        $stmt->bindParam(':recipe_name', $recipe_name);
+        $stmt->bindParam(':recipe_preptime', $recipe_preptime);
+        $stmt->bindParam(':recipe_ingredients', $recipe_ingredients);
+        $stmt->bindParam(':recipe_instruction', $recipe_instruction);
+        $stmt->bindParam(':recipe_calories', $recipe_calories);
+        $stmt->bindParam(':recipe_category', $recipe_category);
+        $stmt->bindParam(':recipe_ingredientsquantity', $recipe_ingredientsquantity);
 
-    // Execute the query
-    if (mysqli_query($conn, $sql)) {
+        // Execute the query
+        $stmt->execute();
+
         echo "<script>alert('Recipe added successfully!');
-        window.location.href = 'admin-update.php';
-        </script>";
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+              window.location.href = 'admin-update.php';</script>";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
-
-    // Close the database connection
-    mysqli_close($conn);
 }
 ?>
 
