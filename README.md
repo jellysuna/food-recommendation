@@ -4,22 +4,21 @@
 
 This system provides a meal planning solution, helping users find food recommendations based on their available ingredients and available time to cook. It includes both **User** and **Admin** sections, where users can interact with the system for personalized food recommendations and calorie/water tracking.
 
-## Features
+## Recommendation Algorithm
 
-### User Section
-- **Meal Recommendations**: Users can get meal recommendations based on two inputs: ingredients they have and their available prep time. It generates 15 meal recommendations with details such as prep time, ingredients, instructions, and calorie information.
-- **Ratings & Feedback**: Users can rate each recommended meal (1-5 scale).
-- **Save & History**: Users can save their favorite meals or add them to their history with personalized notes.
-- **Profile Management**: Users can update their profile (age, gender, weight, height, activity level) to calculate their daily calorie requirements.
-- **Calorie Tracker**: Users can track their calorie intake by adding meal names and calorie values. The system will calculate the remaining calories needed for the day.
-- **Water Intake Tracker**: Users can monitor their daily water intake (fixed at 2000ml) and update progress accordingly.
-- **Grocery List**: Users can list ingredients they don’t have, with options to adjust quantity and mark items as bought.
-- **Food Journal**: Users can record their eating behaviour or meal planning.
-- **Feedback**: Users can provide feedback or report issues related to the system or recipes.
+The recommendation system uses **Content-Based Filtering** and **K-Nearest Neighbors (KNN)** with a **Cosine Similarity** metric to recommend recipes based on user input.
+The algorithm works by filtering recipes based on the user’s available prep time before applying TF-IDF and KNN to identify the closest matches, finally returning the top 15 recommended recipes.
 
-### Admin Section
-- **Recipe Management**: Admins can add new recipes to the system.
-- **Feedback Review**: Admins can view user feedback submitted via the feedback section.
+### Process:
+1. **Data Preprocessing**: The dataset is cleaned by removing unnecessary attributes and transforming attributes into a usable format.
+2. **KNN with Cosine Similarity**: A **TF-IDF Vectorizer** is applied to create a document-term matrix from the recipe ingredients.
+   This matrix is then used with the **K-Nearest Neighbors (KNN)** algorithm, where **Cosine Similarity** is used as the metric to measure the similarity between the user’s input and the recipes.
+
+
+### Files:
+- **recommendation.py**: Contains the main algorithm to generate food recommendations (Flask-based).
+- **100test.py**: A separate testing file to check the algorithm's accuracy (100 runs to get average accuracy) and compute metrics like precision and recall.\
+
 
 ## Data
 
@@ -31,17 +30,3 @@ The path to `recipes.csv` is set in the `config.py` file. Update the `DATA_PATH`
 
 ### Database Configuration (config.php)
 The database connection settings are managed in `config.php`.
-
-## Recommendation Algorithm
-
-The recommendation system uses **Content-Based Filtering** and **K-Nearest Neighbors (KNN)** with a **Cosine Similarity** metric to recommend recipes based on user input.
-
-### Process:
-1. **Data Preprocessing**: Clean the dataset by removing unnecessary attributes and changing formats.
-2. **Cosine Similarity**: Measures the similarity between recipe profiles (based on attributes) and user profiles (based on ingredients).
-3. **KNN**: Uses KNN to find the 15 most similar recipes to the user input.
-
-### Files:
-- **recommendation.py**: Contains the main algorithm to generate food recommendations (Flask-based).
-- **100test.py**: A separate testing file to check the algorithm's accuracy (100 runs to get average accuracy) and compute metrics like precision and recall.
-
