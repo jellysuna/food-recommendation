@@ -17,7 +17,7 @@ The algorithm works by filtering recipes based on the user’s available prep ti
 
 ### Files:
 - **recommendation.py**: Contains the main algorithm to generate food recommendations (Flask-based).
-- **100test.py**: A separate testing file to check the algorithm's accuracy (100 runs to get average accuracy) and compute metrics like precision and recall.\
+- **100test.py**: A separate testing file to check the algorithm's accuracy (100 runs to get average accuracy) and compute metrics like precision and recall.
 
 
 ## Data
